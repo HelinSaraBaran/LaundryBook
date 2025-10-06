@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaundryLibrary.Model
+namespace LaundryLibrary.Repository
 {
-    internal class Class1
+    internal class ResidentRepository
     {
     }
 }

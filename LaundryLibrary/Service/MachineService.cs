@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaundryLibrary.Repository
+namespace LaundryLibrary.Service
 {
-    internal class Class1
+    internal class MachineService
     {
     }
 }
