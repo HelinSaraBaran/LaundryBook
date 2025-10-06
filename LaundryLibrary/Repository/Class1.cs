@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace LaundryLibrary.Domain
+namespace LaundryLibrary.Repository
 {
     internal class Class1
     {
