@@ -35,7 +35,7 @@ namespace LaundryLibrary.Model
             this.Type = type;
         }
 
-        // ToString metode 
+        // ToString override metode -  kan ses som en "visningstekst" 
         public override string ToString()
         {
             return "Machine #" + this.Id.ToString() + " [" + this.Type.ToString() + "]";
