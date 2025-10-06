@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LaundryLibrary.Model
 {
-    internal class Resident
+    public class Resident
     {
     }
 }
