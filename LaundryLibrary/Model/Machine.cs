@@ -26,6 +26,8 @@ namespace LaundryLibrary.Model
         {
             Id = 0;
             Type = MachineType .Washer;
+            Type = MachineType.Dryer;
+            Type = MachineType.Ironer;
         }
 
         // Fulde constructor
