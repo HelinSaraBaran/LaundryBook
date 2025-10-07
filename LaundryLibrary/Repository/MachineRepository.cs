@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+
 
 namespace LaundryLibrary.Repository
 {
@@ -20,16 +22,27 @@ namespace LaundryLibrary.Repository
         }
         public void Add(Machine item)
         {
+            machines.Add(item);
 
         }
         public void Delete(Machine id)
         {
+            Machine MachineToRemove = null; // initialiserer "DocLogToRemove" som "null"
 
+            foreach (Machine d in machines)
+            {
+                if (d.Id == id.Id)
+                {
+                    MachineToRemove = d;
+                    break;
+                }
+            }
+            if (MachineToRemove != null)
+            {
+                machines.Remove(MachineToRemove);
+            }
         }
-        public void Choice(int id)
-        {
-
-        }
+       
 
     }
 

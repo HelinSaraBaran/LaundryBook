@@ -2,8 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+
 
 namespace LaundryLibrary.Repository
 {
@@ -20,14 +23,35 @@ namespace LaundryLibrary.Repository
         }
         public  void Add(Booking item)
         {
+            bookings.Add(item);
 
         }
+        
         public void Delete(Booking id)
         {
+            Booking bookingToRemove = null; // initialiserer "DocLogToRemove" som "null"
 
+            foreach (Booking d in bookings)
+            {
+                if (d == id)
+                {
+                    bookingToRemove = d;
+                    break;
+                }
+            }
+            if (bookingToRemove != null)
+            {
+                bookings.Remove(bookingToRemove);
+            }
         }
         public void Change(DateTime date, DateTime point)
         {
+
+        }
+
+        public void Choice(int id)
+        {
+
 
         }
     }

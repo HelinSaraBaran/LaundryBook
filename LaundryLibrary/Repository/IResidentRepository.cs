@@ -4,16 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+
 
 namespace LaundryLibrary.Repository
 {
     public interface IResidentRepository
     {
-        List<Apartment> GetAllBolig();
-        void AddBolig(Apartment item);
-        void DeleteBolig(Apartment id);
-        List<Resident> GetAllBeboere();
-        void AddBeboere(Resident item);
-        void DeleteBeboere(Resident id);
+        List<Apartment> GetAllApartments();
+        void AddApartment(Apartment item);
+        void DeleteApartment(Apartment id);
+        List<Resident> GetAllResidents();
+        void AddResident(Resident item);
+        void DeleteResident(Resident id);
     }
 }

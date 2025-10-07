@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+
 
 namespace LaundryLibrary.Repository
 {
@@ -12,7 +14,9 @@ namespace LaundryLibrary.Repository
         List<Machine> GetAll();
         void Add(Machine item);
         void Delete(Machine id);
-        void Choice(int id);
+      
+        
+       
 
     }
 }
