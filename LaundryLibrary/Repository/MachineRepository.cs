@@ -5,42 +5,59 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
+using System.Diagnostics;
+using Microsoft.Identity.Client;
 
 
 namespace LaundryLibrary.Repository
 {
     public class MachineRepository:IMachineRepository
     {
-        List<Machine> machines;
+        Dictionary<int,Machine> machines;
         public MachineRepository()
         {
-            machines = new List<Machine>();
+            machines = new Dictionary<int,Machine>();
         }
-        public List<Machine> GetAll()
+        public Dictionary<int,Machine> GetAll()
         {
             return machines;
         }
         public void Add(Machine item)
         {
-            machines.Add(item);
+            int count = 0;
+            foreach (KeyValuePair<int,Machine>  m in machines)
+            {
+                count++;
+                Debug.WriteLine($"count is {count}");
+            }
+            machines.Add(count,item);
 
         }
-        public void Delete(Machine id)
+        public void Delete(int id)
         {
-            Machine MachineToRemove = null; // initialiserer "DocLogToRemove" som "null"
-
-            foreach (Machine d in machines)
+            foreach (KeyValuePair<int, Machine> m in machines)
             {
-                if (d.Id == id.Id)
+                if (m.Key == id)
                 {
-                    MachineToRemove = d;
+                    machines.Remove(m.Key);
                     break;
                 }
             }
-            if (MachineToRemove != null)
+            
+
+          
+        }
+        public Machine FindKey(int key)
+        {
+            if (machines.ContainsKey(key))
             {
-                machines.Remove(MachineToRemove);
+                return machines[key];
             }
+            else
+            {
+                return null;
+            }
+                
         }
        
 
