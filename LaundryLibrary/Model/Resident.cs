@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,23 +21,29 @@ namespace LaundryLibrary.Model
         // constructor - parameterløs 
         public Resident()
         {
-            this.Id = 0;
-            this.FirstName = string.Empty;
-            this.LastName = string.Empty;
-            this.Mobile = string.Empty;
-            this.Email = string.Empty;
-            this.Apartment = new Apartment();
+            Id = 0;
+            FirstName = string.Empty;
+            LastName = string.Empty;
+            Mobile = string.Empty;
+            Email = string.Empty;
+            Apartment = new Apartment();
         }
 
         // 2) Fulde constructor
         public Resident(int id, string firstName, string lastName, string mobile, string email, Apartment apartment)
         {
-            this.Id = id;
-            this.FirstName = firstName;
-            this.LastName = lastName;
-            this.Mobile = mobile;
-            this.Email = email;
-            this.Apartment = apartment;
+            Id = id;
+            FirstName = firstName;
+            LastName = lastName;
+            Mobile = mobile;
+            Email = email;
+            Apartment = apartment;
+        }
+
+        public override string ToString()
+        {
+            return "Booking #" + Id.ToString() + " [" + Apartment.PostalCode.ToString() + "]";
         }
     }
-} // Måske skal er tilføjes tostring ?  for fuld navn fornavn + efternavn
+
+} 

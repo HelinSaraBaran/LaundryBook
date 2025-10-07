@@ -21,23 +21,23 @@ namespace LaundryLibrary.Model
         // Constructor  - Uden parameter - Regler i service laget
         public Apartment()
         { 
-            this.City = string.Empty;
-            this.Floor = 0;
-            this.StreetAndNumber = string.Empty;
-            this.PostalCode = string.Empty;
-            this.ApartmentLetter = "A";
-            this.AddressLine = string.Empty;
+            City = string.Empty;
+            Floor = 0;
+            StreetAndNumber = string.Empty;
+            PostalCode = string.Empty;
+            ApartmentLetter = "A";
+            AddressLine = string.Empty;
         }
 
         // Full constructor 
         public Apartment(string city, int floor, string streetAndNumber, string postalCode, string appartmentLetter, string addressLine)
-        {  // Her er 'this' vores aktuelle instans
-            this.City = city;
-            this.Floor = floor;
-            this.StreetAndNumber = streetAndNumber;
-            this.PostalCode = postalCode;
-            this.ApartmentLetter = appartmentLetter;
-            this.AddressLine = addressLine;
+        {  
+            City = city;
+            Floor = floor;
+            StreetAndNumber = streetAndNumber;
+            PostalCode = postalCode;
+            ApartmentLetter = appartmentLetter;
+            AddressLine = addressLine;
         }
 
 
@@ -45,13 +45,13 @@ namespace LaundryLibrary.Model
         // Hjælpe metode - Metoden returnerer lejlighedskoden i etage + bogstav ved en kombination af floor og apartmentletter
         public string GetApartmentCode()
         {
-            return this.Floor.ToString() + "." + this.ApartmentLetter.ToUpperInvariant();
+            return Floor.ToString() + "." + ApartmentLetter.ToUpperInvariant();
         }
 
         // Override metode 
         public override string ToString()
         {
-            return this.StreetAndNumber + "," + this.PostalCode + "" + this.City +"(" + this.GetApartmentCode() + ")";
+            return StreetAndNumber + "," + PostalCode + "" + City +"(" + GetApartmentCode() + ")";
         }
     }
 }

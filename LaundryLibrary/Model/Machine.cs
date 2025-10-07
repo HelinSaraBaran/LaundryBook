@@ -24,21 +24,21 @@ namespace LaundryLibrary.Model
 
         public Machine() 
         {
-            this.Id = 0;
-            this.Type = MachineType .Washer;
+            Id = 0;
+            Type = MachineType .Washer;
         }
 
         // Fulde constructor
         public Machine(int id, MachineType type)
         {
-            this.Id= id;
-            this.Type = type;
+            Id= id;
+            Type = type;
         }
 
         // ToString override metode -  kan ses som en "visningstekst" 
         public override string ToString()
         {
-            return "Machine #" + this.Id.ToString() + " [" + this.Type.ToString() + "]";
+            return "Machine #" + Id.ToString() + " [" + Type.ToString() + "]";
         }
     }
 
