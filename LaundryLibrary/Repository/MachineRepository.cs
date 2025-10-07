@@ -35,17 +35,13 @@ namespace LaundryLibrary.Repository
         }
         public void Delete(int id)
         {
-            foreach (KeyValuePair<int, Machine> m in machines)
-            {
-                if (m.Key == id)
-                {
-                    machines.Remove(m.Key);
-                    break;
-                }
-            }
             
-
-          
+                if (FindKey(id) != null)
+                {
+                    machines.Remove(id);
+                    
+                }
+            
         }
         public Machine FindKey(int key)
         {
