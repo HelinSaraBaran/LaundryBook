@@ -22,6 +22,10 @@ namespace LaundryLibrary.Repository
         {
             return machines;
         }
+
+
+
+
         public void Add(Machine item)
         {
             int count = 0;

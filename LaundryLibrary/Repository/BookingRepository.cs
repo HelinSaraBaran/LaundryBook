@@ -29,10 +29,10 @@ namespace LaundryLibrary.Repository
             {
                 throw new ArgumentException("Booking cannot be null");
             }
-            if (item.MachineId <= 0 || item.ResidentId <= 0)
+           else if (item.MachineId < 0 && item.ResidentId < 0)
             {
 
-                throw new ArgumentException(" Booking ");
+                bookings.Add(item);
             }
         }
 
