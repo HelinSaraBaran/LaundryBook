@@ -1,5 +1,4 @@
-﻿using LaundryLibrary.Interfaces;
-using LaundryLibrary.Model;
+﻿using LaundryLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +22,7 @@ namespace LaundryLibrary.Repository
         {
 
         }
-        public void Deleate(Booking id)
+        public void Delte(Booking id)
         {
 
         }

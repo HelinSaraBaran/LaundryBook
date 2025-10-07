@@ -11,9 +11,9 @@ namespace LaundryLibrary.Repository
     {
         List<Apartment> GetAllBolig();
         void AddBolig(Apartment item);
-        void DeleateBolig(Apartment id);
+        void DeleteBolig(Apartment id);
         List<Resident> GetAllBeboere();
         void AddBeboere(Resident item);
-        void DeleateBeboere(Resident id);
+        void DeleteBeboere(Resident id);
     }
 }

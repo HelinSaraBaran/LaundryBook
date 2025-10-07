@@ -11,7 +11,7 @@ namespace LaundryLibrary.Repository
     {
         List<Booking> GetAll();
         void Add(Booking item);
-        void Deleate(Booking id);
+        void Delete(Booking id);
         void Change(DateTime date, DateTime point);
     }
 }

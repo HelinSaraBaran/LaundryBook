@@ -1,5 +1,4 @@
-﻿using LaundryLibrary.Interfaces;
-using LaundryLibrary.Model;
+﻿using LaundryLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +24,7 @@ namespace LaundryLibrary.Repository
         {
 
         }
-        public void DeleateBolig(Apartment id)
+        public void DeleteBolig(Apartment id)
         {
 
         }
@@ -37,7 +36,7 @@ namespace LaundryLibrary.Repository
         {
 
         }
-        public void DeleateBeboere(Resident id)
+        public void DeleteBeboere(Resident id)
         {
 
         }

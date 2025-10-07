@@ -10,6 +10,6 @@ namespace LaundryLibrary.Repository
     {
         List<T> GetAll();
         void Add(T item);
-        void Deleate(T id);
+        void Delete(T id);
     }
 }
