@@ -11,8 +11,8 @@ namespace LaundryLibrary.Repository
 {
     public interface IGeneric<T>
     {
-        List<T> GetAll();
+        Dictionary<int,T> GetAll();
         void Add(T item);
-        void Delete(T id);
+        void Delete(int id);
     }
 }

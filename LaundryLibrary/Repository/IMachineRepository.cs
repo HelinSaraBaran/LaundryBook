@@ -11,9 +11,9 @@ namespace LaundryLibrary.Repository
 {
     public interface IMachineRepository:IGeneric<Machine>
     {
-        List<Machine> GetAll();
+        Dictionary<int, Machine> GetAll();
         void Add(Machine item);
-        void Delete(Machine id);
+        void Delete(int id);
       
         
        
