@@ -1,10 +1,11 @@
-﻿using LaundryLibrary.Interfaces;
-using LaundryLibrary.Model;
+﻿using LaundryLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+
 
 namespace LaundryLibrary.Repository
 {
@@ -17,15 +18,15 @@ namespace LaundryLibrary.Repository
             apartments = new List<Apartment>();
             residents = new List<Resident>();
         }
-        public List<Apartment> GetAllBolig()
+        public List<Apartment> GetAllApartments()
         {
             return apartments;
         }
-        public void AddBolig(Apartment item)
+        public void AddApartment(Apartment item)
         {
             apartments.Add(item);
         }
-        public void DeleateBolig(Apartment id)
+        public void DeleteApartment(Apartment id)
         {
             Apartment apartmentToRemove = null; // initialiserer "DocLogToRemove" som "null"
 
@@ -44,15 +45,15 @@ namespace LaundryLibrary.Repository
             }
 
         }
-        public List<Resident> GetAllBeboere()
+        public List<Resident> GetAllResidents()
         {
             return residents;
         }
-        public void AddBeboere(Resident item)
+        public void AddResident(Resident item)
         {
             residents.Add(item);
         }
-        public void DeleateBeboere(Resident id)
+        public void DeleteResident(Resident id)
         {
             Resident residentToRemove = null; // initialiserer "DocLogToRemove" som "null"
 

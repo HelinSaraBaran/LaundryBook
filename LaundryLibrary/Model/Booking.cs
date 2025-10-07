@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+
 
 // class responsible for reservation, machine and resident id 
 namespace LaundryLibrary.Model
@@ -15,12 +17,12 @@ namespace LaundryLibrary.Model
         Slot12_14 = 3,
         Slot14_16 = 4,
         Slot16_18 = 5,
-        Slot18_20 = 6,
+        Slot18_20 = 6, 
     }
     public class Booking
     {
        // our properties 
-       public DateTime Date { get; set; }
+        public DateTime Date { get; set; }
         public TimeSlot Slot { get; set; }
         public int MachineId { get; set; }
         public int ResidentId { get; set; }
@@ -28,20 +30,24 @@ namespace LaundryLibrary.Model
         // Constructor - parameterløs
         public Booking()
         {
-            this.Date = DateTime.Today;
-            this.Slot = TimeSlot.Slot08_10;
-            this.MachineId = 0;
-            this.ResidentId = 0;
+            Date = DateTime.Today;
+            Slot = TimeSlot.Slot08_10;
+            MachineId = 0;
+            ResidentId = 0;
         }
 
         // Fulde constructor
         public Booking(DateTime date, TimeSlot slot, int machineId, int residentId)
         {
-            this.Date = date.Date;
-            this.Slot = slot;
-            this.MachineId = machineId;
-            this.ResidentId = residentId;
+            Date = date.Date;
+            Slot = slot;
+            MachineId = machineId;
+            ResidentId = residentId;
         }
-         // igen måske en tostring overrife for dato  machine id og resident id? 
-    }
+        
+        public override string ToString()
+        {
+            return "Booking #" + MachineId.ToString() + " [" + ResidentId.ToString() + "]";
+        }
+}
 }

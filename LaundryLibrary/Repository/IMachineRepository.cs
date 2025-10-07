@@ -4,13 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
 
-namespace LaundryLibrary.Interfaces
+
+namespace LaundryLibrary.Repository
 {
     public interface IMachineRepository:IGeneric<Machine>
     {
         List<Machine> GetAll();
         void Add(Machine item);
+        void Delete(Machine id);
+        void Choice(int id);
         void Deleate(Machine id);
        
 

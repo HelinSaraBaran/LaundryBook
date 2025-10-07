@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+
 
 // class responsible for person and contact info also apartment link
 namespace LaundryLibrary.Model
@@ -16,6 +18,7 @@ namespace LaundryLibrary.Model
         public string Mobile { get; set; }
         public string Email { get; set; }
         public Apartment Apartment{ get; set; }
+
 
         // constructor - parameterløs 
         public Resident()

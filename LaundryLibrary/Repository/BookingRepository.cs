@@ -1,11 +1,12 @@
-﻿using LaundryLibrary.Interfaces;
-using LaundryLibrary.Model;
+﻿using LaundryLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+
 
 namespace LaundryLibrary.Repository
 {
@@ -25,6 +26,7 @@ namespace LaundryLibrary.Repository
             bookings.Add(item);
 
         }
+        public void Delte(Booking id)
         public void Delete(Booking id)
         {
             Booking bookingToRemove = null; // initialiserer "DocLogToRemove" som "null"

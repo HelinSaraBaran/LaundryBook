@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Data.SqlClient;
+
 
 
 namespace LaundryLibrary.Model
@@ -24,21 +26,23 @@ namespace LaundryLibrary.Model
 
         public Machine() 
         {
-            this.Id = 0;
-            this.Type = MachineType .Washer;
+            Id = 0;
+            Type = MachineType .Washer;
+            Type = MachineType.Dryer;
+            Type = MachineType.Ironer;
         }
 
         // Fulde constructor
         public Machine(int id, MachineType type)
         {
-            this.Id= id;
-            this.Type = type;
+            Id= id;
+            Type = type;
         }
 
         // ToString override metode -  kan ses som en "visningstekst" 
         public override string ToString()
         {
-            return "Machine #" + this.Id.ToString() + " [" + this.Type.ToString() + "]";
+            return "Machine #" + Id.ToString() + " [" + Type.ToString() + "]";
         }
     }
 
