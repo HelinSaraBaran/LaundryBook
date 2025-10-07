@@ -16,27 +16,27 @@ namespace LaundryLibrary.Repository
             apartments = new List<Apartment>();
             residents = new List<Resident>();
         }
-        public List<Apartment> GetAllBolig()
+        public List<Apartment> GetAllApartments()
         {
             return apartments;
         }
-        public void AddBolig(Apartment item)
+        public void AddApartment(Apartment item)
         {
 
         }
-        public void DeleteBolig(Apartment id)
+        public void DeleteApartment(Apartment id)
         {
 
         }
-        public List<Resident> GetAllBeboere()
+        public List<Resident> GetAllResidents()
         {
             return residents;
         }
-        public void AddBeboere(Resident item)
+        public void AddResident(Resident item)
         {
 
         }
-        public void DeleteBeboere(Resident id)
+        public void DeleteResident(Resident id)
         {
 
         }
