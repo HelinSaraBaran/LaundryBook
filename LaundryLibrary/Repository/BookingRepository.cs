@@ -12,7 +12,9 @@ namespace LaundryLibrary.Repository
 {
     public class BookingRepository:IBookingRepository
     {
-        List<Booking> bookings;
+        // vi skal have en internal storage 
+        private readonly List<Booking> bookings;
+
         public BookingRepository()
         {
             bookings = new List<Booking>();
@@ -21,11 +23,19 @@ namespace LaundryLibrary.Repository
         {
             return bookings;
         }
-        public  void Add(Booking item)
+        public void Add(Booking item)
         {
-            bookings.Add(item);
+            if (item == null)
+            {
+                throw new ArgumentException("Booking cannot be null");
+            }
+           else if (item.MachineId < 0 && item.ResidentId < 0)
+            {
 
+                bookings.Add(item);
+            }
         }
+
         
         public void Delete(Booking id)
         {
@@ -51,6 +61,7 @@ namespace LaundryLibrary.Repository
 
         public void Choice(int id)
         {
+            
 
 
         }
