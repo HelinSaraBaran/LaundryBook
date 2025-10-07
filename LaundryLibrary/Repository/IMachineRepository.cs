@@ -14,8 +14,8 @@ namespace LaundryLibrary.Repository
         List<Machine> GetAll();
         void Add(Machine item);
         void Delete(Machine id);
-        void Choice(int id);
-        void Deleate(Machine id);
+      
+        
        
 
     }

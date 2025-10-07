@@ -26,7 +26,7 @@ namespace LaundryLibrary.Repository
             bookings.Add(item);
 
         }
-        public void Delte(Booking id)
+        
         public void Delete(Booking id)
         {
             Booking bookingToRemove = null; // initialiserer "DocLogToRemove" som "null"
