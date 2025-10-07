@@ -22,7 +22,7 @@ namespace LaundryLibrary.Repository
         {
 
         }
-        public void Delte(Booking id)
+        public void Delete(Booking id)
         {
 
         }
