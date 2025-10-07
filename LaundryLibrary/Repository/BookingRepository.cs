@@ -13,18 +13,19 @@ namespace LaundryLibrary.Repository
     public class BookingRepository:IBookingRepository
     {
         // vi skal have en internal storage 
-        private readonly List<Booking> bookings;
+        private readonly Dictionary<int,Booking> bookings;
 
         public BookingRepository()
         {
-            bookings = new List<Booking>();
+            bookings = new Dictionary<int, Booking>();
         }
-        public List<Booking> GetAll()
+        public Dictionary<int,Booking> GetAll()
         {
             return bookings;
         }
         public void Add(Booking item)
         {
+            int count = GetCount();
             if (item == null)
             {
                 throw new ArgumentException("Booking cannot be null");
@@ -32,37 +33,56 @@ namespace LaundryLibrary.Repository
            else if (item.MachineId < 0 && item.ResidentId < 0)
             {
 
-                bookings.Add(item);
+                bookings.Add(count,item);
             }
         }
 
         
-        public void Delete(Booking id)
+        public void Delete(int id)
         {
-            Booking bookingToRemove = null; // initialiserer "DocLogToRemove" som "null"
 
-            foreach (Booking d in bookings)
             {
-                if (d == id)
+                if (FindKey(id) != null)
                 {
-                    bookingToRemove = d;
-                    break;
+                    bookings.Remove(id);
+                    
                 }
             }
-            if (bookingToRemove != null)
-            {
-                bookings.Remove(bookingToRemove);
-            }
         }
-        public void Change(DateTime date, DateTime point)
+        public void Change(DateTime date, int point,int id)
         {
-
+            if(FindKey(id) != null)
+            {
+                bookings[id].Date = date.Date;
+                bookings[id].Slot = bookings[id].ChangeTimeSlot(point, bookings[id].Slot);
+            }
         }
 
         public void Choice(int id)
         {
             
 
+
+        }
+        public int GetCount()
+        {
+            int count = 0;
+            foreach(KeyValuePair<int,Booking> b in bookings)
+            {
+                count++;
+            }
+            return count;
+        }
+        public Booking FindKey(int key)
+        {
+            if (bookings.ContainsKey(key))
+            {
+                return bookings[key];
+            }
+            else
+            {
+                return null;
+            }
 
         }
     }

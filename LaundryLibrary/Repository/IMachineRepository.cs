@@ -14,9 +14,11 @@ namespace LaundryLibrary.Repository
         Dictionary<int, Machine> GetAll();
         void Add(Machine item);
         void Delete(int id);
-      
-        
-       
+        Machine FindKey(int key);
+
+
+
+
 
     }
 }

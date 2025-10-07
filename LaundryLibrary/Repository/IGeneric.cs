@@ -14,5 +14,7 @@ namespace LaundryLibrary.Repository
         Dictionary<int,T> GetAll();
         void Add(T item);
         void Delete(int id);
+         T FindKey(int key);
+
     }
 }

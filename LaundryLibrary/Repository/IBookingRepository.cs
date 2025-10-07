@@ -11,9 +11,11 @@ namespace LaundryLibrary.Repository
 {
     public interface IBookingRepository: IGeneric<Booking>
     {
-        List<Booking> GetAll();
+        Dictionary<int,Booking> GetAll();
         void Add(Booking item);
-        void Delete(Booking id);
+        void Delete(int id);
         void Change(DateTime date, DateTime point);
+        Booking FindKey(int key);
+
     }
 }
