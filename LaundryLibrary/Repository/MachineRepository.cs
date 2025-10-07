@@ -21,16 +21,27 @@ namespace LaundryLibrary.Repository
         }
         public void Add(Machine item)
         {
+            machines.Add(item);
 
         }
-        public void Deleate(Machine id)
+        public void Delete(Machine id)
         {
+            Machine MachineToRemove = null; // initialiserer "DocLogToRemove" som "null"
 
+            foreach (Machine d in machines)
+            {
+                if (d.Id == id.Id)
+                {
+                    MachineToRemove = d;
+                    break;
+                }
+            }
+            if (MachineToRemove != null)
+            {
+                machines.Remove(MachineToRemove);
+            }
         }
-        public void Choice(int id)
-        {
-
-        }
+       
 
     }
 

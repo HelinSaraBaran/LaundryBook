@@ -12,7 +12,7 @@ namespace LaundryLibrary.Interfaces
         List<Machine> GetAll();
         void Add(Machine item);
         void Deleate(Machine id);
-        void Choice(int id);
+       
 
     }
 }
