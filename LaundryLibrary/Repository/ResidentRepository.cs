@@ -20,8 +20,25 @@ namespace LaundryLibrary.Repository
         }
         public List<Apartment> GetAllApartments()
         {
-            return apartments;
-        }
+            var beboere = new List<Apartment>();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("select Resident from beboere", connection);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var apartment = new Apartment((string)reader["city"], (int)reader["floor"], (string)reader["streetAndNumber"], (string)reader["postalCode"], (string)reader["appartmentLetter"], (string)reader["addressLine"]);
+
+
+                    }
+
+                }
+
+
+                return apartments;
+            } }
         public void AddApartment(Apartment item)
         {
             apartments.Add(item);
