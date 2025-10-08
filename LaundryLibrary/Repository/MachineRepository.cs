@@ -40,30 +40,45 @@ namespace LaundryLibrary.Repository
                     }
                 }
             }
-
-
-
-
             return machines;
         }
 
-
-
-
         public void Add(Machine item)
         {
-            int count = 0;
-            foreach (KeyValuePair<int,Machine>  m in machines)
+            using (var connection = new SqlConnection(_connectionString))
             {
-                count++;
-                Debug.WriteLine($"count is {count}");
-            }
-            machines.Add(count,item);
+                var command = new SqlCommand("insert into maskiner(maskine_ID, maskine_type) values (@maskine_ID, @maskine_type)", connection);
+                command.Parameters.AddWithValue("@maskine_ID", item.Id);
+                command.Parameters.AddWithValue("@maskine_type", item.Type);
+                connection.Open();
+                command.ExecuteNonQuery();
 
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    { }
+                }
+                int count = 0;
+                foreach (KeyValuePair<int, Machine> m in machines)
+                {
+                    count++;
+                    Debug.WriteLine($"count is {count}");
+                }
+                machines.Add(count, item);
+
+            }
         }
         public void Delete(int id)
         {
-            
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("delete from maskiner Where Id = @Id", connection);
+                command.Parameters.AddWithValue("@Id", id);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+
                 if (FindKey(id) != null)
                 {
                     machines.Remove(id);
