@@ -58,11 +58,14 @@ namespace LaundryLibrary.Repository
             }
         }
 
-        public void Choice(int id)
+        public void Choice(int id, int booking)
         {
             
-
-
+            if(FindKey(booking) != null)
+            {
+                bookings[booking].MachineId = id;
+            }
+            
         }
         public int GetCount()
         {
