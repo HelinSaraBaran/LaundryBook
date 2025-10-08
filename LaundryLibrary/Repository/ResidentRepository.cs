@@ -11,6 +11,11 @@ namespace LaundryLibrary.Repository
 {
     public class ResidentRepository:IResidentRepository
     {
+        private string _connectionString;
+        public ResidentRepository(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
         List<Apartment> apartments;
         List<Resident> residents;
         public ResidentRepository()
