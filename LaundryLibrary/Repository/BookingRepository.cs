@@ -62,16 +62,16 @@ namespace LaundryLibrary.Repository
                 return bookings;
             }
         }
-        
+
         public void Add(Booking item)
         {
-            
+
             using (var connection = new SqlConnection(_connectionString))
             {
                 var command = new SqlCommand("Insert into Booking(dato, tidspunkt, maskine_ID,mobile) Values (@dato,@tidspunkt, @maskine_ID, @mobile)", connection);
-                command.Parameters.AddWithValue("@dato",item.Date);
-                command.Parameters.AddWithValue("@tidspunkt",item.Slot);
-                command.Parameters.AddWithValue("@maskine_ID",item.MachineId);
+                command.Parameters.AddWithValue("@dato", item.Date);
+                command.Parameters.AddWithValue("@tidspunkt", item.Slot);
+                command.Parameters.AddWithValue("@maskine_ID", item.MachineId);
                 command.Parameters.AddWithValue("@mobile", item.ResidentId);
                 connection.Open();
                 command.ExecuteNonQuery();
@@ -85,14 +85,15 @@ namespace LaundryLibrary.Repository
                     }
                 }
                 int count = GetCount();
-            if (item == null)
-            {
-                throw new ArgumentException("Booking cannot be null");
-            }
-           else if (item.MachineId < 0 && item.ResidentId < 0)
-            {
+                if (item == null)
+                {
+                    throw new ArgumentException("Booking cannot be null");
+                }
+                else if (item.MachineId < 0 && item.ResidentId < 0)
+                {
 
-                bookings.Add(count,item);
+                    bookings.Add(count, item);
+                }
             }
         }
 
