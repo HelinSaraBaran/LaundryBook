@@ -46,17 +46,16 @@ namespace LaundryLibrary.Repository
                         var booking = new Booking()
                         {
 
-                            {
-                                dato = (DateTime)reader["dato"],
+                            
+                                Date = (DateTime)reader["dato"],
+                                MachineId = (int)reader["Machineid"],
+                                ResidentId = (int)reader["Residentid"],
+                                Slot = (TimeSlot)reader["Tid"],
 
 
-                            }
-                            bookings.Add(booking)
 
 
-
-
-                        };
+                        }; bookings.Add(1, booking);
 
                     }
                 }
