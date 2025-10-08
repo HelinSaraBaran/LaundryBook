@@ -1,17 +1,30 @@
 ﻿using LaundryLibrary.Model;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace LaundryLibrary.Repository
 {
+    
+
+
     public class BookingRepository:IBookingRepository
     {
+
+
+        private string _connectionString;
+        public BookingRepository(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
+
         // vi skal have en internal storage 
         private readonly Dictionary<int,Booking> bookings;
 
@@ -19,10 +32,38 @@ namespace LaundryLibrary.Repository
         {
             bookings = new Dictionary<int, Booking>();
         }
-        public Dictionary<int,Booking> GetAll()
+        public Dictionary<int, Booking> GetAll()
         {
-            return bookings;
+            var Booking = new Dictionary<int, Booking>();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("Select dato from booking", connection);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var booking = new Booking()
+                        {
+
+                            {
+                                dato = (DateTime)reader["dato"],
+
+
+                            }
+                            bookings.Add(booking)
+
+
+
+
+                        };
+
+                    }
+                }
+                return bookings;
+            }
         }
+        
         public void Add(Booking item)
         {
             int count = GetCount();
@@ -88,5 +129,6 @@ namespace LaundryLibrary.Repository
             }
 
         }
+        
     }
 }
