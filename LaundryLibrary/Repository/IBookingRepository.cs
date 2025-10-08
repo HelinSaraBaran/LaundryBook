@@ -16,6 +16,8 @@ namespace LaundryLibrary.Repository
         void Delete(int id);
         void Change(DateTime date, int point, int id);
         Booking FindKey(int key);
+        void Choice(int id, int booking);
+
 
     }
 }
