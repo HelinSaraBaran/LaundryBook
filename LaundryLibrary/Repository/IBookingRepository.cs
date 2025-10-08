@@ -14,7 +14,7 @@ namespace LaundryLibrary.Repository
         Dictionary<int,Booking> GetAll();
         void Add(Booking item);
         void Delete(int id);
-        void Change(DateTime date, DateTime point);
+        void Change(DateTime date, int point, int id);
         Booking FindKey(int key);
 
     }
