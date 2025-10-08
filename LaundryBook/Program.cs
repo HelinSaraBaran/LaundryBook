@@ -1,3 +1,6 @@
+using LaundryLibrary.Repository;
+using LaundryLibrary.Service;
+
 namespace LaundryBook
 {
     public class Program
@@ -5,6 +8,13 @@ namespace LaundryBook
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddSingleton<IMachineRepository, MachineRepository>();
+            builder.Services.AddSingleton<MachineService>();
+            builder.Services.AddSingleton<IBookingRepository, BookingRepository>();
+            builder.Services.AddSingleton<BookingRepository>();
+            builder.Services.AddSingleton<IResidentRepository, ResidentRepository>();
+            builder.Services.AddSingleton<ResidentService>();
+
 
             // Add services to the container.
             builder.Services.AddRazorPages();
