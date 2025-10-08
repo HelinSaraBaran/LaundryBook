@@ -27,17 +27,10 @@ namespace LaundryLibrary.Model
         public int MachineId { get; set; }
         public int ResidentId { get; set; }
 
-        // Constructor - parameterløs
-        public Booking()
-        {
-            Date = DateTime.Today;
-            Slot = TimeSlot.Slot08_10;
-            MachineId = 0;
-            ResidentId = 0;
-        }
+       
 
         // Fulde constructor
-        public Booking(DateTime date, int slot, int machineId, int residentId):this()
+        public Booking(DateTime date, int slot, int machineId, int residentId)
         {
             Date = date.Date;
             MachineId = machineId;

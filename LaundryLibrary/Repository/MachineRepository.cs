@@ -13,6 +13,13 @@ namespace LaundryLibrary.Repository
 {
     public class MachineRepository:IMachineRepository
     {
+
+        private string _connectionString;
+        public MachineRepository(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
         Dictionary<int,Machine> machines;
         public MachineRepository()
         {
@@ -20,6 +27,23 @@ namespace LaundryLibrary.Repository
         }
         public Dictionary<int,Machine> GetAll()
         {
+            var Machine = new Dictionary<int,Machine>();
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("Select machine from maskiner", connection);
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var machine = new Machine((int)reader["maskine_ID"], (MachineType) reader["type"]);
+                    }
+                }
+            }
+
+
+
+
             return machines;
         }
 

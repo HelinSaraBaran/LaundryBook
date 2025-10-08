@@ -20,17 +20,7 @@ namespace LaundryLibrary.Model
         public string ApartmentLetter { get; set; } // Lejligheds nr (A til Å) 
         public string AddressLine {  get; set; } // fulde adresse 
 
-        // Constructor  - Uden parameter - Regler i service laget
-        public Apartment()
-        { 
-            City = string.Empty;
-            Floor = 0;
-            StreetAndNumber = string.Empty;
-            PostalCode = string.Empty;
-            ApartmentLetter = "A";
-            AddressLine = string.Empty;
-        }
-
+      
         // Full constructor 
         public Apartment(string city, int floor, string streetAndNumber, string postalCode, string appartmentLetter, string addressLine)
         {  

@@ -22,15 +22,6 @@ namespace LaundryLibrary.Model
         public int Id { get; set; } // PK i database
         public MachineType Type { get; set; } // enum i vores kode
 
-        // parameterløs constructor 
-
-        public Machine() 
-        {
-            Id = 0;
-            Type = MachineType .Washer;
-            Type = MachineType.Dryer;
-            Type = MachineType.Ironer;
-        }
 
         // Fulde constructor
         public Machine(int id, MachineType type)

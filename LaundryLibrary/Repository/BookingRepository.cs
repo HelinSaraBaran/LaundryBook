@@ -43,17 +43,10 @@ namespace LaundryLibrary.Repository
                 {
                     while (reader.Read())
                     {
-                        var booking = new Booking()
+                        var booking = new Booking((DateTime)reader["dato"],(int)reader["Tid"],(int)reader["Machineid"],(int)reader["Residentid"])
                         {
 
-                            
-                                Date = (DateTime)reader["dato"],
-                                MachineId = (int)reader["Machineid"],
-                                ResidentId = (int)reader["Residentid"],
-                                Slot = (TimeSlot)reader["Tid"],
-
-
-
+                           
 
                         }; bookings.Add(1, booking);
 

@@ -20,16 +20,7 @@ namespace LaundryLibrary.Model
         public Apartment Apartment{ get; set; }
 
 
-        // constructor - parameterløs 
-        public Resident()
-        {
-            this.Id = 0;
-            this.FirstName = string.Empty;
-            this.LastName = string.Empty;
-            this.Mobile = string.Empty;
-            this.Email = string.Empty;
-            this.Apartment = new Apartment();
-        }
+        
 
         // 2) Fulde constructor
         public Resident(int id, string firstName, string lastName, string mobile, string email, Apartment apartment)
