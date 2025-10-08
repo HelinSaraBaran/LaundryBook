@@ -65,7 +65,26 @@ namespace LaundryLibrary.Repository
         
         public void Add(Booking item)
         {
-            int count = GetCount();
+            
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("Insert into Booking(dato, tidspunkt, maskine_ID,mobile) Values (@dato,@tidspunkt, @maskine_ID, @mobile)", connection);
+                command.Parameters.AddWithValue("@dato",item.Date);
+                command.Parameters.AddWithValue("@tidspunkt",item.Slot);
+                command.Parameters.AddWithValue("@maskine_ID",item.MachineId);
+                command.Parameters.AddWithValue("@mobile", item.ResidentId);
+                connection.Open();
+                command.ExecuteNonQuery();
+
+                connection.Open();
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+
+                    }
+                }
+                int count = GetCount();
             if (item == null)
             {
                 throw new ArgumentException("Booking cannot be null");
@@ -80,7 +99,13 @@ namespace LaundryLibrary.Repository
         
         public void Delete(int id)
         {
-
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("Delete from Booking Where Id = @Id", connection);
+                command.Parameters.AddWithValue("@Id",id);
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
             {
                 if (FindKey(id) != null)
                 {
