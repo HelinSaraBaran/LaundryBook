@@ -12,5 +12,27 @@ namespace LaundryLibrary.Service
 {
     public class MachineService
     {
+        IMachineRepository _IMachine;
+        public MachineService(IMachineRepository repo)
+        {
+            _IMachine = repo;
+        }
+        public Dictionary<int, Machine> GetAll()
+        {
+            return _IMachine.GetAll();
+        }
+        public void Add(Machine item)
+        {
+            _IMachine.Add(item);
+        }
+        public void Delete(int id)
+        {
+            _IMachine.Delete(id);
+        }
+        public Machine FindKey(int key)
+        {
+            return _IMachine.FindKey(key);
+        }
+
     }
 }
