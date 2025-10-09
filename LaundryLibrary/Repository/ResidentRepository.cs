@@ -80,13 +80,13 @@ namespace LaundryLibrary.Repository
 
             residents.Add(item);
         }
-        public void DeleteResident(Resident id)
+        public void DeleteResident(Resident resident)
         {
             Resident residentToRemove = null; // initialiserer "DocLogToRemove" som "null"
 
             foreach (Resident d in residents)  //løber igennem hver "DocJournal" objekt i "_docJournal" listen. det valgte objekt bliver forløbeligt navngivet "d"
             {
-                if (d == id) //tjekker om det valgte id matcher med det i parametren
+                if (d == resident) //tjekker om det valgte id matcher med det i parametren
                 {
                     residentToRemove = d; //hvis det gør 
                     break; //stopper den med at løbe igennem
