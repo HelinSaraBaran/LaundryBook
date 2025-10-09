@@ -26,13 +26,12 @@ namespace LaundryBook.Pages
 
        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        
-
         private readonly ILogger<BookingModel> _logger;
 
-        public BookingModel(ILogger<BookingModel> logger)
+        public BookingModel(ILogger<BookingModel> logger, ResidentService rs)
         {
             _logger = logger;
+            _residentService = rs;
         }
 
 
@@ -41,7 +40,7 @@ namespace LaundryBook.Pages
         {
             residents = _residentService.GetAllResidents();
         }
-
+       
         // her bliver den slettet
         public IActionResult OnPost(Resident resident) 
         {
