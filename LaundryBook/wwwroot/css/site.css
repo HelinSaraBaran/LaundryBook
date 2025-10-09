@@ -1,31 +1,81 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+    background-color: #f5f9fa; /* meget lys blågrøn baggrund */
+    color: #2b2b2b; /* mørk tekst */
+    font-family: 'Inter', Arial, sans-serif;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+/* Fokus-styles */
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus,
+.form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #48a9a6;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+/* Navbar */
+.navbar {
+    background-color: #e6f1f2 !important; /* lys mint-blå */
 }
+
+.nav-link {
+    color: #2b2b2b !important;
+    font-weight: 500;
+}
+
+.nav-link:hover {
+    color: #48a9a6 !important; /* frisk vandfarve */
+}
+
+/* Primære knapper */
+.btn-primary {
+    background: linear-gradient(180deg, #48a9a6, #2e8b88);
+    border: none;
+    color: white;
+    font-weight: 700;
+}
+
+.btn-primary:hover {
+    filter: brightness(1.1);
+}
+
+/* Sekundære knapper */
+.btn-outline-light {
+    border: 1px solid #48a9a6;
+    color: #48a9a6;
+    background: transparent;
+}
+
+.btn-outline-light:hover {
+    background: rgba(72, 169, 166, 0.1);
+    color: #2e8b88;
+}
+
+/* Links */
+a {
+    color: #2e8b88;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: #22706e;
+}
+
+/* Kort billeder */
+.card-img-top {
+    aspect-ratio: 16/8;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* Logo */
+.logo-img {
+    height: 40px;
+    width: auto;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.logo-img:hover {
+    transform: scale(1.1);
+}
+
