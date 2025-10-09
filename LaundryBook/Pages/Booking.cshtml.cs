@@ -47,8 +47,6 @@ namespace LaundryBook.Pages
         {
             _residentService.DeleteResident(resident);
 
-
-
             return RedirectToPage();
         }
     }
