@@ -11,16 +11,16 @@ namespace LaundryBook.Pages
         private readonly ResidentService _residentService;
         public List<Resident> residents { get; set; } = new List<Resident>(); 
         [BindProperty]
-        public string Name { get; set; }
+        public DateTime Date{ get; set; }
 
         [BindProperty]
-        public string Description { get; set; }
+        public TimeSlot Slot{ get; set; }
 
         [BindProperty]
-        public string PhoneNumber { get; set; }
+        public int MachineId{ get; set; }
 
         [BindProperty]
-        public string Email { get; set; }
+        public int Residentid { get; set; }
 
         private BookingService _bookingService;
 
