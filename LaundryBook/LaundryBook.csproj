@@ -10,4 +10,8 @@
     <ProjectReference Include="..\LaundryLibrary\LaundryLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Img\" />
+  </ItemGroup>
+
 </Project>
