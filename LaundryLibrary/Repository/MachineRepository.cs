@@ -30,13 +30,13 @@ namespace LaundryLibrary.Repository
             var Machine = new Dictionary<int,Machine>();
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = new SqlCommand("Select machine from maskiner", connection);
+                var command = new SqlCommand("Select machine_Id,machine_Type from machines", connection);
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        var machine = new Machine((int)reader["maskine_ID"], (MachineType) reader["type"]);
+                        var machine = new Machine((int)reader["machine_ID"], (MachineType) reader["type"]);
                     }
                 }
             }
@@ -47,9 +47,9 @@ namespace LaundryLibrary.Repository
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = new SqlCommand("insert into maskiner(maskine_ID, maskine_type) values (@maskine_ID, @maskine_type)", connection);
-                command.Parameters.AddWithValue("@maskine_ID", item.Id);
-                command.Parameters.AddWithValue("@maskine_type", item.Type);
+                var command = new SqlCommand("insert into machines(machine_ID, machine_type) values (@machine_ID, @machine_type)", connection);
+                command.Parameters.AddWithValue("@machine_ID", item.Id);
+                command.Parameters.AddWithValue("@machine_type", item.Type);
                 connection.Open();
                 command.ExecuteNonQuery();
 
@@ -73,7 +73,7 @@ namespace LaundryLibrary.Repository
         {
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = new SqlCommand("delete from maskiner Where Id = @Id", connection);
+                var command = new SqlCommand("delete from machines Where Id = @Id", connection);
                 command.Parameters.AddWithValue("@Id", id);
                 connection.Open();
                 command.ExecuteNonQuery();

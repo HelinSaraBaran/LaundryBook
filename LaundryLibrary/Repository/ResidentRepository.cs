@@ -25,54 +25,59 @@ namespace LaundryLibrary.Repository
         }
         public List<Apartment> GetAllApartments()
         {
-            var beboere = new List<Apartment>();
+            var residents = new List<Apartment>();
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = new SqlCommand("select Resident from beboere", connection);
+                var command = new SqlCommand("select Resident from residents", connection);
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         var apartment = new Apartment((string)reader["city"], (int)reader["floor"], (string)reader["streetAndNumber"], (string)reader["postalCode"], (string)reader["appartmentLetter"], (string)reader["addressLine"]);
-
-
                     }
-
                 }
-
-
                 return apartments;
             } }
         public void AddApartment(Apartment item)
         {
-            apartments.Add(item);
-        }
-        public void DeleteApartment(Apartment id)
-        {
-            Apartment apartmentToRemove = null; // initialiserer "DocLogToRemove" som "null"
-
-            foreach (Apartment d in apartments)  //løber igennem hver "DocJournal" objekt i "_docJournal" listen. det valgte objekt bliver forløbeligt navngivet "d"
+            using (var connection = new SqlConnection(_connectionString))
             {
-                if (d == id) //tjekker om det valgte id matcher med det i parametren
+                var command = new SqlCommand("Insert into residents(city, floor, streetAndNumber, postalCode, appartmentLetter, addressLine) Values (@city, @floor, @streetAndNumber, @postalCode, @appartmentLetter, @addressLine)", connection);
+                command.Parameters.AddWithValue("@city", item.City);
+                command.Parameters.AddWithValue("@floor", item.Floor);
+                command.Parameters.AddWithValue("@streetAndNumber", item.StreetAndNumber);
+                command.Parameters.AddWithValue("@postalCode", item.PostalCode);
+                command.Parameters.AddWithValue("@appartmentLetter", item.ApartmentLetter);
+                command.Parameters.AddWithValue("@addressLine", item.AddressLine);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+                using (var reader = command.ExecuteReader())
                 {
-                    apartmentToRemove = d; //hvis det gør 
-                    break; //stopper den med at løbe igennem
+                    while (reader.Read()) ;
                 }
-            }
 
-            if (apartmentToRemove != null) //hvis en matching DocJournal blev fundet
-            {
-                apartments.Remove(apartmentToRemove); //bliver den slettet fra listen
             }
+        }
+        public void DeleteApartment(Apartment apartment)
+        {
+            using (var connection = new SqlConnection(_connectionString))
+            {
+                var command = new SqlCommand("Delete from residents Where apartmentnumber, adress = @apartmentnumber ,@adress", connection);
+                command.Parameters.AddWithValue("@apartmentnumber", apartment.ApartmentLetter);
+            }
+            
 
         }
         public List<Resident> GetAllResidents()
         {
             return residents;
         }
+
         public void AddResident(Resident item)
         {
+
             residents.Add(item);
         }
         public void DeleteResident(Resident id)

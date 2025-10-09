@@ -37,18 +37,16 @@ namespace LaundryLibrary.Repository
             var Booking = new Dictionary<int, Booking>();
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = new SqlCommand("Select dato from booking", connection);
+                var command = new SqlCommand("Select date from booking", connection);
                 connection.Open();
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        var booking = new Booking((DateTime)reader["dato"],(int)reader["Tid"],(int)reader["Machineid"],(int)reader["Residentid"])
+                        var booking = new Booking((DateTime)reader["date"],(int)reader["bookingtime"],(int)reader["Machineid"],(int)reader["Residentid"])
                         {
-
-                           
-
-                        }; bookings.Add(1, booking);
+                        }; 
+                        bookings.Add(1, booking);
 
                     }
                 }
@@ -61,10 +59,10 @@ namespace LaundryLibrary.Repository
 
             using (var connection = new SqlConnection(_connectionString))
             {
-                var command = new SqlCommand("Insert into Booking(dato, tidspunkt, maskine_ID,mobile) Values (@dato,@tidspunkt, @maskine_ID, @mobile)", connection);
-                command.Parameters.AddWithValue("@dato", item.Date);
-                command.Parameters.AddWithValue("@tidspunkt", item.Slot);
-                command.Parameters.AddWithValue("@maskine_ID", item.MachineId);
+                var command = new SqlCommand("Insert into Booking(date, bookingtime, maskine_ID,mobile) Values (@date,@bookingtime, @machine_ID, @mobile)", connection);
+                command.Parameters.AddWithValue("@date", item.Date);
+                command.Parameters.AddWithValue("@bookingtime", item.Slot);
+                command.Parameters.AddWithValue("@machine_ID", item.MachineId);
                 command.Parameters.AddWithValue("@mobile", item.ResidentId);
                 connection.Open();
                 command.ExecuteNonQuery();
