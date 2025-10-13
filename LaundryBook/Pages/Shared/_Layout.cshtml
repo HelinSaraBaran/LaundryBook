@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="~/LaundryBook.styles.css" asp-append-version="true" />
 </head>
 <body>
+    @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+    @{
+        var isLoggedIn = HttpContextAccessor.HttpContext?.Session.GetString("UserLoggedIn") == "True";
+        var username = HttpContextAccessor.HttpContext?.Session.GetString("Username");
+    }
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
@@ -30,9 +35,22 @@
                         <li class="nav-item ">
                             <a class = "nav-link text-dark" asp-area="" asp-page="/Overview1">Oversigt</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Login">Log ind</a>
-                        </li>
+                        @if (isLoggedIn)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Logout">Log ud</a>
+                            </li>
+                            <li class="nav-item">
+                                <span class="nav-link text-muted">Hej, @username </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Login">Log ind</a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>

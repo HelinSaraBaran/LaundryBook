@@ -23,7 +23,11 @@ public class LoginModel : PageModel
         //check login
         if (Username == "admin" && Password == "1234")
         {
-            //if valid login
+
+            HttpContext.Session.SetString("UserLoggedIn", "True");
+            HttpContext.Session.SetString("Username", Username);
+
+            //return to home page if valid login
             return RedirectToPage("/Index");
         }
         //if invalid login

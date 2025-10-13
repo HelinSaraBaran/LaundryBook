@@ -18,6 +18,10 @@ namespace LaundryBook
 
             // Add services to the container.
             builder.Services.AddRazorPages();
+            // Add session services
+            builder.Services.AddSession();
+            // Add HttpContextAccessor to access session in non-page classes
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
@@ -32,6 +36,8 @@ namespace LaundryBook
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            // Enable session before UseAuthorization
+            app.UseSession(); 
 
             app.UseAuthorization();
 
