@@ -4,22 +4,22 @@
 	ViewData["Title"] = "Log in";
 }
 <section class="container py-5" style="max-width:500px;">
-    <h2 class="mb-4 text-center" style="font-family:'Playfair Display', serif;"> Log in</h2>
+    <h2 class="mb-4 text-center" style="font-family:'Playfair Display', serif;"> Log ind</h2>
 
     <form method="post">
         <div class="mb-3">
-            <label asp-for="Username" class="form-label">User name </label>
+            <label asp-for="Username" class="form-label">Bruger navn </label>
             <input asp-for="Username" class="form-control" placeholder=" Insert user name " />
             <span asp-validation-for="Username" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Password" class="form-label"> Password</label>
+            <label asp-for="Password" class="form-label"> Adgangskode</label>
             <input asp-for="Password" type="password" class="form-control" placeholder="••••••••" />
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
-        <button type="submit" class="btn btn-gold w-100"> Login</button>
+        <button type="submit" class="btn btn-gold w-100"> Logind</button>
     </form>
 
     @if (Model.ErrorMessage != null)
