@@ -1,105 +1,162 @@
 ﻿using LaundryLibrary.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
-using System.Diagnostics;
-using Microsoft.Identity.Client;
-
 
 namespace LaundryLibrary.Repository
 {
-    public class MachineRepository:IMachineRepository
+    
+    public class MachineRepository : IMachineRepository
     {
+       
+        private readonly string _connectionString;
 
-        private string _connectionString;
+  
+        private readonly Dictionary<int, Machine> _machines;
+
+       
         public MachineRepository(string connectionString)
         {
             _connectionString = connectionString;
+            _machines = new Dictionary<int, Machine>();
+
+            Console.WriteLine("🔍 MachineRepository connectionString = " + connectionString);
         }
 
-        Dictionary<int,Machine> machines;
-        public MachineRepository()
+      
+        public Dictionary<int, Machine> GetAll()
         {
-            machines = new Dictionary<int,Machine>();
-        }
-        public Dictionary<int,Machine> GetAll()
-        {
-            var Machine = new Dictionary<int,Machine>();
-            using (var connection = new SqlConnection(_connectionString))
+            Dictionary<int, Machine> machinesFromDatabase = new Dictionary<int, Machine>();
+
+            
+            SqlConnection connection = new SqlConnection(_connectionString);
+            SqlCommand command = new SqlCommand("SELECT machine_ID, machine_type FROM machines", connection);
+
+            try
             {
-                var command = new SqlCommand("Select machine_Id,machine_Type from machines", connection);
+                
                 connection.Open();
-                using (var reader = command.ExecuteReader())
+
+               
+                SqlDataReader reader = command.ExecuteReader();
+
+              
+                while (reader.Read())
                 {
-                    while (reader.Read())
+                    int id = Convert.ToInt32(reader["machine_ID"]);
+
+                
+                    string typeText = reader["machine_type"].ToString();
+                    MachineType type;
+
+                 
+                    if (int.TryParse(typeText, out int numericType))
                     {
-                        var machine = new Machine((int)reader["machine_ID"], (MachineType) reader["type"]);
+                        type = (MachineType)numericType;
                     }
+                    else
+                    {
+                        type = (MachineType)Enum.Parse(typeof(MachineType), typeText, true);
+                    }
+
+                    Machine machine = new Machine(id, type);
+                    machinesFromDatabase.Add(id, machine);
+                }
+
+              
+                reader.Close();
+            }
+            catch (SqlException ex)
+            {
+              
+                throw new Exception("Database error in MachineRepository.GetAll(): " + ex.Message);
+            }
+            finally
+            {
+              
+                if (connection.State == System.Data.ConnectionState.Open)
+                {
+                    connection.Close();
                 }
             }
-            return machines;
+
+            return machinesFromDatabase;
         }
 
         public void Add(Machine item)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            SqlConnection connection = new SqlConnection(_connectionString);
+            SqlCommand command = new SqlCommand(
+                "INSERT INTO machines (machine_ID, machine_type) VALUES (@machine_ID, @machine_type)", connection);
+
+      
+            command.Parameters.AddWithValue("@machine_ID", item.Id);
+            command.Parameters.AddWithValue("@machine_type", item.Type.ToString());
+
+            try
             {
-                var command = new SqlCommand("insert into machines(machine_ID, machine_type) values (@machine_ID, @machine_type)", connection);
-                command.Parameters.AddWithValue("@machine_ID", item.Id);
-                command.Parameters.AddWithValue("@machine_type", item.Type);
                 connection.Open();
-                command.ExecuteNonQuery();
-
-                connection.Open();
-                using (var reader = command.ExecuteReader())
+                command.ExecuteNonQuery();     
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Database error in MachineRepository.Add(): " + ex.Message);
+            }
+            finally
+            {
+                if (connection.State == System.Data.ConnectionState.Open)
                 {
-                    while (reader.Read())
-                    { }
+                    connection.Close();
                 }
-                int count = 0;
-                foreach (KeyValuePair<int, Machine> m in machines)
-                {
-                    count++;
-                    Debug.WriteLine($"count is {count}");
-                }
-                machines.Add(count, item);
+            }
 
+            if (!_machines.ContainsKey(item.Id))
+            {
+                _machines.Add(item.Id, item);
             }
         }
+
         public void Delete(int id)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            SqlConnection connection = new SqlConnection(_connectionString);
+            SqlCommand command = new SqlCommand("DELETE FROM machines WHERE machine_ID = @Id", connection);
+            command.Parameters.AddWithValue("@Id", id);
+
+            try
             {
-                var command = new SqlCommand("delete from machines Where Id = @Id", connection);
-                command.Parameters.AddWithValue("@Id", id);
                 connection.Open();
-                command.ExecuteNonQuery();
+                command.ExecuteNonQuery();    
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Database error in MachineRepository.Delete(): " + ex.Message);
+            }
+            finally
+            {
+                if (connection.State == System.Data.ConnectionState.Open)
+                {
+                    connection.Close();
+                }
             }
 
-                if (FindKey(id) != null)
-                {
-                    machines.Remove(id);
-                    
-                }
-            
+            if (_machines.ContainsKey(id))
+            {
+                _machines.Remove(id);
+            }
         }
+
         public Machine FindKey(int key)
         {
-            if (machines.ContainsKey(key))
+            if (_machines.ContainsKey(key))
             {
-                return machines[key];
+                return _machines[key];
             }
             else
             {
                 return null;
             }
-                
         }
-       
-
     }
-
 }
+

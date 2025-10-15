@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
-
-
-// class responsible for reservation, machine and resident id 
-namespace LaundryLibrary.Model
+﻿namespace LaundryLibrary.Model
 {
-    // enum 2 hours (maks to timer som står i vores opgave ) gemt som int i vores database
+    // enum 2 hours (gemmes som 1..6 i DB)
     public enum TimeSlot
     {
         Slot08_10 = 1,
@@ -17,17 +8,16 @@ namespace LaundryLibrary.Model
         Slot12_14 = 3,
         Slot14_16 = 4,
         Slot16_18 = 5,
-        Slot18_20 = 6, 
+        Slot18_20 = 6
     }
+
     public class Booking
     {
-       // our properties 
+        // our properties 
         public DateTime Date { get; set; }
         public TimeSlot Slot { get; set; }
         public int MachineId { get; set; }
         public int ResidentId { get; set; }
-
-       
 
         // Fulde constructor
         public Booking(DateTime date, int slot, int machineId, int residentId)
@@ -36,68 +26,32 @@ namespace LaundryLibrary.Model
             MachineId = machineId;
             ResidentId = residentId;
 
-            if (slot != null && TimeSlot.Slot08_10.Equals(1))
+            
+            if (slot >= 1 && slot <= 6)
             {
-                Slot = TimeSlot.Slot08_10;
-            }
-            else if (slot != null && TimeSlot.Slot10_12.Equals(2))
-            {
-                Slot = TimeSlot.Slot10_12;
-            }
-            else if (slot != null && TimeSlot.Slot12_14.Equals(3))
-            {
-                Slot = TimeSlot.Slot12_14;
-            }
-            else if (slot != null && TimeSlot.Slot12_14.Equals(4))
-            {
-                Slot = TimeSlot.Slot14_16;
-            }
-            else if (slot != null && TimeSlot.Slot14_16.Equals(5))
-            {
-                Slot = TimeSlot.Slot16_18;
-            }
-            else if (slot != null && TimeSlot.Slot16_18.Equals(6))
-            {
-                Slot = TimeSlot.Slot18_20;
-            }
-           
-        }
-
-        public TimeSlot ChangeTimeSlot(int newslot, TimeSlot slot)
-        {
-            if (newslot != null && TimeSlot.Slot08_10.Equals(1))
-            {
-                return Slot = TimeSlot.Slot08_10;
-            }
-            else if (newslot != null && TimeSlot.Slot10_12.Equals(2))
-            {
-                return Slot = TimeSlot.Slot10_12;
-            }
-            else if (newslot != null && TimeSlot.Slot12_14.Equals(3))
-            {
-                return Slot = TimeSlot.Slot12_14;
-            }
-            else if (newslot != null && TimeSlot.Slot14_16.Equals(4))
-            {
-                return Slot = TimeSlot.Slot14_16;
-            }
-            else if (newslot != null && TimeSlot.Slot16_18.Equals(5))
-            {
-                return Slot = TimeSlot.Slot16_18;
-            }
-            else if (newslot != null && TimeSlot.Slot18_20.Equals(6))
-            {
-                return Slot = TimeSlot.Slot18_20;
+                Slot = (TimeSlot)slot;
             }
             else
             {
-                return slot;
+                Slot = TimeSlot.Slot08_10;
             }
         }
-        
+
+      
+        public TimeSlot ChangeTimeSlot(int newslot, TimeSlot current)
+        {
+            if (newslot >= 1 && newslot <= 6)
+            {
+                Slot = (TimeSlot)newslot;
+                return Slot;
+            }
+            return current;
+        }
+
+      
         public override string ToString()
         {
             return "Booking #" + MachineId.ToString() + " [" + ResidentId.ToString() + "]";
         }
-}
+    }
 }

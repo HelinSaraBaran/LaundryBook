@@ -2,149 +2,175 @@
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.PortableExecutable;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
+using System.Data;
 
 namespace LaundryLibrary.Repository
 {
-    
-
-
-    public class BookingRepository:IBookingRepository
+    public class BookingRepository : IBookingRepository
     {
+        private readonly string _connectionString;
+        private readonly Dictionary<int, Booking> _bookings;
 
-
-        private string _connectionString;
         public BookingRepository(string connectionString)
         {
             _connectionString = connectionString;
+            _bookings = new Dictionary<int, Booking>();
         }
 
-
-        // vi skal have en internal storage 
-        private readonly Dictionary<int,Booking> bookings;
-
-        public BookingRepository()
-        {
-            bookings = new Dictionary<int, Booking>();
-        }
         public Dictionary<int, Booking> GetAll()
         {
-            var Booking = new Dictionary<int, Booking>();
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                var command = new SqlCommand("Select date from booking", connection);
-                connection.Open();
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        var booking = new Booking((DateTime)reader["date"],(int)reader["bookingtime"],(int)reader["Machineid"],(int)reader["Residentid"])
-                        {
-                        }; 
-                        bookings.Add(1, booking);
+            Dictionary<int, Booking> result = new Dictionary<int, Booking>();
 
+            SqlConnection connection = new SqlConnection(_connectionString);
+            SqlCommand command = new SqlCommand(
+                "SELECT bookingdate, bookingtime, machine_ID, mobile FROM Booking",
+                connection);
+
+            try
+            {
+                connection.Open();
+                SqlDataReader reader = command.ExecuteReader();
+
+                int counter = 1;
+                while (reader.Read())
+                {
+                    DateTime date = Convert.ToDateTime(reader["bookingdate"]);
+                    int slot = Convert.ToInt32(reader["bookingtime"]);
+                    int machineId = Convert.ToInt32(reader["machine_ID"]);
+
+                    int residentId = 0;
+                    string mobileText = reader["mobile"].ToString();
+                    if (int.TryParse(mobileText, out int mobileValue))
+                    {
+                        residentId = mobileValue;
                     }
+
+                    Booking booking = new Booking(date, slot, machineId, residentId);
+                    result.Add(counter, booking);
+                    counter++;
                 }
-                return bookings;
+
+                reader.Close();
             }
+            catch (SqlException ex)
+            {
+                throw new Exception("Database error in BookingRepository.GetAll(): " + ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
+                {
+                    connection.Close();
+                }
+            }
+
+            return result;
         }
 
         public void Add(Booking item)
         {
+            SqlConnection connection = new SqlConnection(_connectionString);
+            SqlCommand command = new SqlCommand(
+                "INSERT INTO Booking (bookingdate, bookingtime, machine_ID, mobile) " +
+                "VALUES (@date, @time, @machine, @mobile)",
+                connection);
 
-            using (var connection = new SqlConnection(_connectionString))
+           
+            command.Parameters.AddWithValue("@date", item.Date);
+            command.Parameters.AddWithValue("@time", ((int)item.Slot).ToString());
+            command.Parameters.AddWithValue("@machine", item.MachineId);
+            command.Parameters.AddWithValue("@mobile", item.ResidentId.ToString());
+
+            try
             {
-                var command = new SqlCommand("Insert into Booking(date, bookingtime, maskine_ID,mobile) Values (@date,@bookingtime, @machine_ID, @mobile)", connection);
-                command.Parameters.AddWithValue("@date", item.Date);
-                command.Parameters.AddWithValue("@bookingtime", item.Slot);
-                command.Parameters.AddWithValue("@machine_ID", item.MachineId);
-                command.Parameters.AddWithValue("@mobile", item.ResidentId);
                 connection.Open();
                 command.ExecuteNonQuery();
-
-                connection.Open();
-                using (var reader = command.ExecuteReader())
+            }
+            catch (SqlException ex)
+            {
+                throw new Exception("Database error in BookingRepository.Add(): " + ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
                 {
-                    while (reader.Read())
-                    {
+                    connection.Close();
+                }
+            }
 
-                    }
-                }
-                int count = GetCount();
-                if (item == null)
-                {
-                    throw new ArgumentException("Booking cannot be null");
-                }
-                else if (item.MachineId < 0 && item.ResidentId < 0)
-                {
-
-                    bookings.Add(count, item);
-                }
+            int nextKey = _bookings.Count + 1;
+            if (!_bookings.ContainsKey(nextKey))
+            {
+                _bookings.Add(nextKey, item);
             }
         }
 
-        
         public void Delete(int id)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            SqlConnection connection = new SqlConnection(_connectionString);
+            SqlCommand command = new SqlCommand("DELETE FROM Booking WHERE machine_ID = @id", connection);
+            command.Parameters.AddWithValue("@id", id);
+
+            try
             {
-                var command = new SqlCommand("Delete from Booking Where Id = @Id", connection);
-                command.Parameters.AddWithValue("@Id",id);
                 connection.Open();
                 command.ExecuteNonQuery();
             }
+            catch (SqlException ex)
             {
-                if (FindKey(id) != null)
+                throw new Exception("Database error in BookingRepository.Delete(): " + ex.Message);
+            }
+            finally
+            {
+                if (connection.State == ConnectionState.Open)
                 {
-                    bookings.Remove(id);
-                    
+                    connection.Close();
                 }
             }
-        }
-        public void Change(DateTime date, int point,int id)
-        {
-            if(FindKey(id) != null)
+
+            if (_bookings.ContainsKey(id))
             {
-                bookings[id].Date = date.Date;
-                bookings[id].Slot = bookings[id].ChangeTimeSlot(point, bookings[id].Slot);
+                _bookings.Remove(id);
+            }
+        }
+
+        public void Change(DateTime date, int point, int id)
+        {
+            if (_bookings.ContainsKey(id))
+            {
+                _bookings[id].Date = date.Date;
+                _bookings[id].Slot = _bookings[id].ChangeTimeSlot(point, _bookings[id].Slot);
             }
         }
 
         public void Choice(int id, int booking)
         {
-            
-            if(FindKey(booking) != null)
+            if (_bookings.ContainsKey(booking))
             {
-                bookings[booking].MachineId = id;
+                _bookings[booking].MachineId = id;
             }
-            
         }
+
         public int GetCount()
         {
             int count = 0;
-            foreach(KeyValuePair<int,Booking> b in bookings)
+            foreach (KeyValuePair<int, Booking> b in _bookings)
             {
                 count++;
             }
             return count;
         }
+
         public Booking FindKey(int key)
         {
-            if (bookings.ContainsKey(key))
+            if (_bookings.ContainsKey(key))
             {
-                return bookings[key];
+                return _bookings[key];
             }
             else
             {
                 return null;
             }
-
         }
-        
     }
 }

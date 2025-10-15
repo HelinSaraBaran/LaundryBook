@@ -1,53 +1,80 @@
-﻿using LaundryLibrary.Model;
+﻿using System;
+using System.Collections.Generic;
+using LaundryLibrary.Model;
 using LaundryLibrary.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace LaundryBook.Pages
 {
+   
     public class BookingModel : PageModel
-
     {
+        
         private readonly ResidentService _residentService;
-        public List<Resident> residents { get; set; } = new List<Resident>(); 
+        private readonly MachineService _machineService;
+        private readonly BookingService _bookingService;
+
+        
+        public List<Resident> Residents { get; set; } = new List<Resident>();
+        public Dictionary<int, Machine> Machines { get; set; } = new Dictionary<int, Machine>();
+        public Dictionary<int, Booking> Bookings { get; set; } = new Dictionary<int, Booking>();
+
+       
         [BindProperty]
-        public DateTime Date{ get; set; }
+        public DateTime Date { get; set; }
 
         [BindProperty]
-        public TimeSlot Slot{ get; set; }
+        public int Slot { get; set; }      
 
         [BindProperty]
-        public int MachineId{ get; set; }
+        public int MachineId { get; set; }
 
         [BindProperty]
-        public int Residentid { get; set; }
+        public int ResidentId { get; set; }
 
-        private BookingService _bookingService;
-
-       private readonly IWebHostEnvironment _webHostEnvironment;
-
-        private readonly ILogger<BookingModel> _logger;
-
-        public BookingModel(ILogger<BookingModel> logger, ResidentService rs)
+        public BookingModel(ResidentService residentService, MachineService machineService, BookingService bookingService)
         {
-            _logger = logger;
-            _residentService = rs;
+            _residentService = residentService;
+            _machineService = machineService;
+            _bookingService = bookingService;
+
+            Date = DateTime.Today;
+            Slot = 1;
+            MachineId = 0;
+            ResidentId = 0;
         }
 
-
-        // her henter den alle residents
         public void OnGet()
         {
-            residents = _residentService.GetAllResidents();
+            Residents = _residentService.GetAllResidents();
+            Machines = _machineService.GetAll();
+            Bookings = _bookingService.GetAll();
         }
-       
-        // her bliver den slettet
-        public IActionResult OnPost(Resident resident) 
-        {
-            _residentService.DeleteResident(resident);
 
-            return RedirectToPage();
+        public IActionResult OnPostCreate()
+        {
+            Booking newBooking = new Booking(Date, Slot, MachineId, ResidentId);
+            _bookingService.Add(newBooking);
+            return RedirectToPage("/Booking");
+        }
+
+        public IActionResult OnPostDelete(int key)
+        {
+            _bookingService.Delete(key);
+            return RedirectToPage("/Booking");
+        }
+
+        public IActionResult OnPostChange(int key, DateTime newDate, int newSlot)
+        {
+            _bookingService.Change(newDate, newSlot, key);
+            return RedirectToPage("/Booking");
+        }
+
+        public IActionResult OnPostChooseMachine(int key, int machineId)
+        {
+            _bookingService.Choice(machineId, key);
+            return RedirectToPage("/Booking");
         }
     }
-
 }
