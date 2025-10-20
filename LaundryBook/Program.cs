@@ -10,7 +10,7 @@ namespace LaundryBook
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
        
-            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=vask_en_tid;Integrated Security=True;;Encrypt=False";
 
          
             IMachineRepository machineRepositoryInstance = new MachineRepository(connectionString);
