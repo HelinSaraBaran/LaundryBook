@@ -8,19 +8,19 @@ using Microsoft.Data.SqlClient;
 
 
 namespace LaundryLibrary.Model
-{ // Responsible for identity and type of a laundry machine
+{ 
     public enum MachineType
     {
-     Washer = 1, // Vaskemaskine
-     Dryer = 2, //Tørretumbler
-     Ironer = 3, // Rullemaskine
+     Washer = 1, 
+     Dryer = 2, 
+     Ironer = 3, 
 
     }
 
     public class Machine
     {
-        public int Id { get; set; } // PK i database
-        public MachineType Type { get; set; } // enum i vores kode
+        public int Id { get; set; } 
+        public MachineType Type { get; set; } 
 
 
         // Fulde constructor
@@ -30,7 +30,7 @@ namespace LaundryLibrary.Model
             Type = type;
         }
 
-        // ToString override metode -  kan ses som en "visningstekst" 
+        // ToString override metode 
         public override string ToString()
         {
             return "Machine #" + Id.ToString() + " [" + Type.ToString() + "]";

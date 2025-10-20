@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using LaundryLibrary.Repository;
 using LaundryLibrary.Service;
 
@@ -9,28 +12,20 @@ namespace LaundryBook
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-       
-            string connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=vask_en_tid;Integrated Security=True;;Encrypt=False";
+            string connectionString = builder.Configuration.GetConnectionString("LaundryDb");
 
-         
-            IMachineRepository machineRepositoryInstance = new MachineRepository(connectionString);
-            IBookingRepository bookingRepositoryInstance = new BookingRepository(connectionString);
-            IResidentRepository residentRepositoryInstance = new ResidentRepository(connectionString);
+            builder.Services.AddScoped<IMachineRepository>(_ => new MachineRepository(connectionString));
+            builder.Services.AddScoped<IBookingRepository>(_ => new BookingRepository(connectionString));
+            builder.Services.AddScoped<IResidentRepository>(_ => new ResidentRepository(connectionString));
 
-     
-            builder.Services.AddSingleton<IMachineRepository>(machineRepositoryInstance);
-            builder.Services.AddSingleton<IBookingRepository>(bookingRepositoryInstance);
-            builder.Services.AddSingleton<IResidentRepository>(residentRepositoryInstance);
+            builder.Services.AddScoped<MachineService>();
+            builder.Services.AddScoped<BookingService>();
+            builder.Services.AddScoped<ResidentService>();
 
-      
-            builder.Services.AddSingleton<MachineService>();
-            builder.Services.AddSingleton<BookingService>();
-            builder.Services.AddSingleton<ResidentService>();
-
-  
             builder.Services.AddRazorPages();
+            builder.Services.AddHttpContextAccessor();     
+            builder.Services.AddDistributedMemoryCache();  
             builder.Services.AddSession();
-            builder.Services.AddHttpContextAccessor();
 
             WebApplication app = builder.Build();
 
@@ -41,16 +36,13 @@ namespace LaundryBook
             }
 
             app.UseHttpsRedirection();
-
+            app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseSession();
-
+            app.UseSession();      
             app.UseAuthorization();
 
-            app.MapStaticAssets();
-            app.MapRazorPages().WithStaticAssets();
-
+            app.MapRazorPages();
             app.Run();
         }
     }

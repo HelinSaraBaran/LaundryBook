@@ -2,247 +2,228 @@
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
-using System.Data;
 
 namespace LaundryLibrary.Repository
 {
     public class ResidentRepository : IResidentRepository
     {
-        
-        private readonly string _connectionString;
+        private readonly string _connectionString; 
+        private readonly List<Apartment> _apartmentList; 
+        private readonly List<Resident> _residentList;   
 
-        
-        private readonly List<Apartment> _apartments;
-        private readonly List<Resident> _residents;
-
-       
+        // Constructor 
         public ResidentRepository(string connectionString)
         {
             _connectionString = connectionString;
-            _apartments = new List<Apartment>();
-            _residents = new List<Resident>();
+            _apartmentList = new List<Apartment>();
+            _residentList = new List<Resident>();
         }
 
-    
+        // Henter alle lejligheder fra databasen
         public List<Apartment> GetAllApartments()
         {
-            List<Apartment> result = new List<Apartment>();
+            List<Apartment> apartmentsFromDatabase = new List<Apartment>();
 
-            SqlConnection connection = new SqlConnection(_connectionString);
-            SqlCommand command = new SqlCommand(
+            SqlConnection sqlConnection = new SqlConnection(_connectionString);
+            SqlCommand sqlCommand = new SqlCommand(
                 "SELECT adress, streetnumber, postalcode, apartmentnumber, apartmentfloor FROM residents",
-                connection);
+                sqlConnection);
 
             try
             {
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                sqlConnection.Open();
+                SqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
-                while (reader.Read())
+                while (sqlReader.Read())
                 {
-                    string street = reader["adress"].ToString();
-                    string streetNumber = reader["streetnumber"].ToString();
-                    string postalCode = reader["postalcode"].ToString();
-                    string apartmentLetter = reader["apartmentnumber"].ToString();
-                    int floor = Convert.ToInt32(reader["apartmentfloor"]);
+                    string street = sqlReader["adress"].ToString();
+                    string streetNumber = sqlReader["streetnumber"].ToString();
+                    string postalCode = sqlReader["postalcode"].ToString();
+                    string apartmentLetter = sqlReader["apartmentnumber"].ToString();
+                    int floor = Convert.ToInt32(sqlReader["apartmentfloor"]);
 
                     Apartment apartment = new Apartment("Roskilde", floor, streetNumber, postalCode, apartmentLetter, street);
-                    result.Add(apartment);
+                    apartmentsFromDatabase.Add(apartment);
                 }
 
-                reader.Close();
+                sqlReader.Close();
             }
-            catch (SqlException ex)
+            catch (SqlException sqlError)
             {
-                throw new Exception("Database error in ResidentRepository.GetAllApartments(): " + ex.Message);
+                throw new Exception("Databasefejl i ResidentRepository.GetAllApartments(): " + sqlError.Message);
             }
             finally
             {
-                if (connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                sqlConnection.Close();
             }
 
-            return result;
+            return apartmentsFromDatabase;
         }
 
-        
-        public void AddApartment(Apartment item)
+        // Tilføjer en ny lejlighed til databasen
+        public void AddApartment(Apartment apartment)
         {
-            SqlConnection connection = new SqlConnection(_connectionString);
-            SqlCommand command = new SqlCommand(
+            SqlConnection sqlConnection = new SqlConnection(_connectionString);
+            SqlCommand sqlCommand = new SqlCommand(
                 "INSERT INTO residents (adress, streetnumber, postalcode, apartmentnumber, apartmentfloor) " +
                 "VALUES (@adress, @streetnumber, @postalcode, @apartmentnumber, @apartmentfloor)",
-                connection);
+                sqlConnection);
 
-            command.Parameters.AddWithValue("@adress", item.AddressLine);
-            command.Parameters.AddWithValue("@streetnumber", item.StreetAndNumber);
-            command.Parameters.AddWithValue("@postalcode", item.PostalCode);
-            command.Parameters.AddWithValue("@apartmentnumber", item.ApartmentLetter);
-            command.Parameters.AddWithValue("@apartmentfloor", item.Floor);
+            sqlCommand.Parameters.AddWithValue("@adress", apartment.AddressLine);
+            sqlCommand.Parameters.AddWithValue("@streetnumber", apartment.StreetAndNumber);
+            sqlCommand.Parameters.AddWithValue("@postalcode", apartment.PostalCode);
+            sqlCommand.Parameters.AddWithValue("@apartmentnumber", apartment.ApartmentLetter);
+            sqlCommand.Parameters.AddWithValue("@apartmentfloor", apartment.Floor);
 
             try
             {
-                connection.Open();
-                command.ExecuteNonQuery();
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
             }
-            catch (SqlException ex)
+            catch (SqlException sqlError)
             {
-                throw new Exception("Database error in ResidentRepository.AddApartment(): " + ex.Message);
+                throw new Exception("Databasefejl i ResidentRepository.AddApartment(): " + sqlError.Message);
             }
             finally
             {
-                if (connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                sqlConnection.Close();
             }
 
-            _apartments.Add(item);
+            _apartmentList.Add(apartment);
         }
 
-        
+        // Sletter en lejlighed fra databasen
         public void DeleteApartment(Apartment apartment)
         {
-            SqlConnection connection = new SqlConnection(_connectionString);
-            SqlCommand command = new SqlCommand("DELETE FROM residents WHERE apartmentnumber = @apartmentnumber", connection);
-            command.Parameters.AddWithValue("@apartmentnumber", apartment.ApartmentLetter);
+            SqlConnection sqlConnection = new SqlConnection(_connectionString);
+            SqlCommand sqlCommand = new SqlCommand(
+                "DELETE FROM residents WHERE apartmentnumber = @apartmentnumber", sqlConnection);
+            sqlCommand.Parameters.AddWithValue("@apartmentnumber", apartment.ApartmentLetter);
 
             try
             {
-                connection.Open();
-                command.ExecuteNonQuery();
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
             }
-            catch (SqlException ex)
+            catch (SqlException sqlError)
             {
-                throw new Exception("Database error in ResidentRepository.DeleteApartment(): " + ex.Message);
+                throw new Exception("Databasefejl i ResidentRepository.DeleteApartment(): " + sqlError.Message);
             }
             finally
             {
-                if (connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                sqlConnection.Close();
             }
 
-            _apartments.Remove(apartment);
+            _apartmentList.Remove(apartment);
         }
 
- 
+        // Henter alle beboere fra databasen
         public List<Resident> GetAllResidents()
         {
-            List<Resident> result = new List<Resident>();
+            List<Resident> residentsFromDatabase = new List<Resident>();
 
-            SqlConnection connection = new SqlConnection(_connectionString);
-            SqlCommand command = new SqlCommand(
+            SqlConnection sqlConnection = new SqlConnection(_connectionString);
+            SqlCommand sqlCommand = new SqlCommand(
                 "SELECT firstname, lastname, mobile, email, apartmentnumber, adress, streetnumber, postalcode, apartmentfloor FROM residents",
-                connection);
+                sqlConnection);
 
             try
             {
-                connection.Open();
-                SqlDataReader reader = command.ExecuteReader();
+                sqlConnection.Open();
+                SqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
                 int idCounter = 1;
-                while (reader.Read())
+                while (sqlReader.Read())
                 {
-                    string firstName = reader["firstname"].ToString();
-                    string lastName = reader["lastname"].ToString();
-                    string mobile = reader["mobile"].ToString();
-                    string email = reader["email"].ToString();
-                    string apartmentLetter = reader["apartmentnumber"].ToString();
-                    string street = reader["adress"].ToString();
-                    string streetNumber = reader["streetnumber"].ToString();
-                    string postal = reader["postalcode"].ToString();
-                    int floor = Convert.ToInt32(reader["apartmentfloor"]);
+                    string firstName = sqlReader["firstname"].ToString();
+                    string lastName = sqlReader["lastname"].ToString();
+                    string mobile = sqlReader["mobile"].ToString();
+                    string email = sqlReader["email"].ToString();
+                    string apartmentLetter = sqlReader["apartmentnumber"].ToString();
+                    string street = sqlReader["adress"].ToString();
+                    string streetNumber = sqlReader["streetnumber"].ToString();
+                    string postal = sqlReader["postalcode"].ToString();
+                    int floor = Convert.ToInt32(sqlReader["apartmentfloor"]);
 
                     Apartment apartment = new Apartment("Roskilde", floor, streetNumber, postal, apartmentLetter, street);
                     Resident resident = new Resident(idCounter, firstName, lastName, mobile, email, apartment);
-                    result.Add(resident);
+
+                    residentsFromDatabase.Add(resident);
                     idCounter++;
                 }
 
-                reader.Close();
+                sqlReader.Close();
             }
-            catch (SqlException ex)
+            catch (SqlException sqlError)
             {
-                throw new Exception("Database error in ResidentRepository.GetAllResidents(): " + ex.Message);
+                throw new Exception("Databasefejl i ResidentRepository.GetAllResidents(): " + sqlError.Message);
             }
             finally
             {
-                if (connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                sqlConnection.Close();
             }
 
-            return result;
+            return residentsFromDatabase;
         }
 
-    
-        public void AddResident(Resident item)
+        // Tilføjer en ny beboer til databasen
+        public void AddResident(Resident resident)
         {
-            SqlConnection connection = new SqlConnection(_connectionString);
-            SqlCommand command = new SqlCommand(
+            SqlConnection sqlConnection = new SqlConnection(_connectionString);
+            SqlCommand sqlCommand = new SqlCommand(
                 "INSERT INTO residents (firstname, lastname, mobile, email, apartmentnumber, adress, streetnumber, postalcode, apartmentfloor) " +
                 "VALUES (@firstname, @lastname, @mobile, @email, @apartmentnumber, @adress, @streetnumber, @postalcode, @apartmentfloor)",
-                connection);
+                sqlConnection);
 
-            command.Parameters.AddWithValue("@firstname", item.FirstName);
-            command.Parameters.AddWithValue("@lastname", item.LastName);
-            command.Parameters.AddWithValue("@mobile", item.Mobile);
-            command.Parameters.AddWithValue("@email", item.Email);
-            command.Parameters.AddWithValue("@apartmentnumber", item.Apartment.ApartmentLetter);
-            command.Parameters.AddWithValue("@adress", item.Apartment.AddressLine);
-            command.Parameters.AddWithValue("@streetnumber", item.Apartment.StreetAndNumber);
-            command.Parameters.AddWithValue("@postalcode", item.Apartment.PostalCode);
-            command.Parameters.AddWithValue("@apartmentfloor", item.Apartment.Floor);
+            sqlCommand.Parameters.AddWithValue("@firstname", resident.FirstName);
+            sqlCommand.Parameters.AddWithValue("@lastname", resident.LastName);
+            sqlCommand.Parameters.AddWithValue("@mobile", resident.Mobile);
+            sqlCommand.Parameters.AddWithValue("@email", resident.Email);
+            sqlCommand.Parameters.AddWithValue("@apartmentnumber", resident.Apartment.ApartmentLetter);
+            sqlCommand.Parameters.AddWithValue("@adress", resident.Apartment.AddressLine);
+            sqlCommand.Parameters.AddWithValue("@streetnumber", resident.Apartment.StreetAndNumber);
+            sqlCommand.Parameters.AddWithValue("@postalcode", resident.Apartment.PostalCode);
+            sqlCommand.Parameters.AddWithValue("@apartmentfloor", resident.Apartment.Floor);
 
             try
             {
-                connection.Open();
-                command.ExecuteNonQuery();
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
             }
-            catch (SqlException ex)
+            catch (SqlException sqlError)
             {
-                throw new Exception("Database error in ResidentRepository.AddResident(): " + ex.Message);
+                throw new Exception("Databasefejl i ResidentRepository.AddResident(): " + sqlError.Message);
             }
             finally
             {
-                if (connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                sqlConnection.Close();
             }
 
-            _residents.Add(item);
+            _residentList.Add(resident);
         }
 
+        // Sletter en beboer fra databasen
         public void DeleteResident(Resident resident)
         {
-            SqlConnection connection = new SqlConnection(_connectionString);
-            SqlCommand command = new SqlCommand("DELETE FROM residents WHERE mobile = @mobile", connection);
-            command.Parameters.AddWithValue("@mobile", resident.Mobile);
+            SqlConnection sqlConnection = new SqlConnection(_connectionString);
+            SqlCommand sqlCommand = new SqlCommand("DELETE FROM residents WHERE mobile = @mobile", sqlConnection);
+            sqlCommand.Parameters.AddWithValue("@mobile", resident.Mobile);
 
             try
             {
-                connection.Open();
-                command.ExecuteNonQuery();
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
             }
-            catch (SqlException ex)
+            catch (SqlException sqlError)
             {
-                throw new Exception("Database error in ResidentRepository.DeleteResident(): " + ex.Message);
+                throw new Exception("Databasefejl i ResidentRepository.DeleteResident(): " + sqlError.Message);
             }
             finally
             {
-                if (connection.State == ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                sqlConnection.Close();
             }
 
-            _residents.Remove(resident);
+            _residentList.Remove(resident);
         }
     }
 }

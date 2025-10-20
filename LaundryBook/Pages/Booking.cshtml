@@ -5,20 +5,25 @@
 }
 
 <section class="container py-5">
+
+    <!-- Overskrift -->
     <div class="text-center mb-4">
         <h1 class="display-6" style="font-family:'Playfair Display',serif;">🧺 Opret ny booking</h1>
         <p class="text-muted">Vælg dato, tidsrum, maskine og beboer</p>
     </div>
 
-    <!-- Form card -->
+    <!-- Formular til ny booking -->
     <div class="card shadow-sm mb-5">
         <div class="card-body">
             <form method="post" asp-page-handler="Create" class="row g-3">
+
+                <!-- Dato -->
                 <div class="col-md-3">
                     <label asp-for="Date" class="form-label fw-semibold">Dato</label>
                     <input asp-for="Date" type="date" class="form-control" />
                 </div>
 
+                <!-- Tidsrum -->
                 <div class="col-md-3">
                     <label asp-for="Slot" class="form-label fw-semibold">Tidsrum</label>
                     <select asp-for="Slot" class="form-select">
@@ -31,88 +36,101 @@
                     </select>
                 </div>
 
+                <!-- Maskine -->
                 <div class="col-md-3">
                     <label asp-for="MachineId" class="form-label fw-semibold">Maskine</label>
-                    <select asp-for="MachineId" class="form-select">
-                        @foreach (System.Collections.Generic.KeyValuePair<int, LaundryLibrary.Model.Machine> m in Model.Machines)
+                    <select asp-for="MachineId" class="form-select" required>
+                        <option value="0">– vælg maskine –</option>
+                        @if (Model.Machines != null && Model.Machines.Count > 0)
                         {
-                            <option value="@m.Value.Id">#@m.Value.Id (@m.Value.Type)</option>
+                            foreach (var machine in Model.Machines.Values)
+                            {
+                                <option value="@machine.Id">
+                                    #@machine.Id (@(
+                                    machine.Type == LaundryLibrary.Model.MachineType.Washer ? "Vaskemaskine" :
+                                    machine.Type == LaundryLibrary.Model.MachineType.Dryer ? "Tørretumbler" :
+                                    "Rullemaskine"))
+                        </option>
+                                                }
                         }
                     </select>
+                    @if (Model.Machines == null || Model.Machines.Count == 0)
+                    {
+                        <div class="form-text text-warning">Ingen maskiner i databasen.</div>
+                    }
                 </div>
 
+                <!-- Beboer -->
                 <div class="col-md-3">
-                    <label asp-for="ResidentId" class="form-label fw-semibold">Beboer</label>
-                    <select asp-for="ResidentId" class="form-select">
-                        @foreach (LaundryLibrary.Model.Resident r in Model.Residents)
+                    <label asp-for="Mobile" class="form-label fw-semibold">Beboer</label>
+                    <select asp-for="Mobile" class="form-select" required>
+                        <option value="">– vælg beboer –</option>
+                        @if (Model.Residents != null && Model.Residents.Count > 0)
                         {
-                            <option value="@r.Id">@r.FirstName @r.LastName</option>
+                            foreach (var resident in Model.Residents)
+                            {
+                                <option value="@resident.Mobile">
+                                    @resident.FirstName @resident.LastName (@resident.Mobile)
+                                </option>
+                            }
                         }
                     </select>
+                    @if (Model.Residents == null || Model.Residents.Count == 0)
+                    {
+                        <div class="form-text text-warning">Ingen beboere i databasen.</div>
+                    }
                 </div>
 
+                <!-- Gem-knap -->
                 <div class="col-12 text-end mt-3">
-                    <button type="submit" class="btn btn-gold px-4">Gem booking</button>
+                    <button type="submit" class="btn btn-primary px-4">Gem booking</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Table of bookings -->
+    <!-- Aktuelle bookinger -->
     <h2 class="mb-3" style="font-family:'Playfair Display',serif;">Aktuelle bookinger</h2>
+
     <div class="table-responsive">
         <table class="table table-striped align-middle shadow-sm">
             <thead class="table-light">
                 <tr>
-                    <th>Nøgle</th>
                     <th>Dato</th>
                     <th>Tidsrum</th>
                     <th>Maskine</th>
-                    <th>Beboer</th>
+                    <th>Mobil</th>
                     <th>Handling</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (System.Collections.Generic.KeyValuePair<int, LaundryLibrary.Model.Booking> kv in Model.Bookings)
+                @if (Model.Bookings != null && Model.Bookings.Count > 0)
+                {
+                    foreach (var booking in Model.Bookings.Values)
+                    {
+                        <tr>
+                            <td>@booking.Date.ToString("yyyy-MM-dd")</td>
+                            <td>@booking.Slot</td>
+                            <td>@booking.MachineId</td>
+                            <td>@booking.Mobile</td>
+                            <td>
+                                <form method="post" asp-page-handler="Delete" class="d-inline">
+                                    <input type="hidden" name="machineId" value="@booking.MachineId" />
+                                    <input type="hidden" name="mobile" value="@booking.Mobile" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Slet</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
                 {
                     <tr>
-                        <td>@kv.Key</td>
-                        <td>@kv.Value.Date.ToString("yyyy-MM-dd")</td>
-                        <td>@kv.Value.Slot</td>
-                        <td>@kv.Value.MachineId</td>
-                        <td>@kv.Value.ResidentId</td>
-                        <td class="text-nowrap">
-                            <form method="post" asp-page-handler="Delete" class="d-inline">
-                                <input type="hidden" name="key" value="@kv.Key" />
-                                <button type="submit" class="btn btn-sm btn-danger">Slet</button>
-                            </form>
-                            <form method="post" asp-page-handler="Change" class="d-inline">
-                                <input type="hidden" name="key" value="@kv.Key" />
-                                <input type="date" name="newDate" class="form-control form-control-sm d-inline-block" style="width:140px;" />
-                                <select name="newSlot" class="form-select form-select-sm d-inline-block" style="width:120px;">
-                                    <option value="1">08–10</option>
-                                    <option value="2">10–12</option>
-                                    <option value="3">12–14</option>
-                                    <option value="4">14–16</option>
-                                    <option value="5">16–18</option>
-                                    <option value="6">18–20</option>
-                                </select>
-                                <button type="submit" class="btn btn-sm btn-primary">Skift</button>
-                            </form>
-                            <form method="post" asp-page-handler="ChooseMachine" class="d-inline">
-                                <input type="hidden" name="key" value="@kv.Key" />
-                                <select name="machineId" class="form-select form-select-sm d-inline-block" style="width:100px;">
-                                    @foreach (System.Collections.Generic.KeyValuePair<int, LaundryLibrary.Model.Machine> m in Model.Machines)
-                                    {
-                                        <option value="@m.Value.Id">@m.Value.Id</option>
-                                    }
-                                </select>
-                                <button type="submit" class="btn btn-sm btn-secondary">Sæt</button>
-                            </form>
-                        </td>
+                        <td colspan="5" class="text-muted">Ingen bookinger endnu.</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+
 </section>

@@ -17,6 +17,7 @@ namespace LaundryLibrary.Repository
             _bookings = new Dictionary<int, Booking>();
         }
 
+        // Henter alle bookinger fra databasen
         public Dictionary<int, Booking> GetAll()
         {
             Dictionary<int, Booking> result = new Dictionary<int, Booking>();
@@ -38,14 +39,12 @@ namespace LaundryLibrary.Repository
                     int slot = Convert.ToInt32(reader["bookingtime"]);
                     int machineId = Convert.ToInt32(reader["machine_ID"]);
 
-                    int residentId = 0;
-                    string mobileText = reader["mobile"].ToString();
-                    if (int.TryParse(mobileText, out int mobileValue))
-                    {
-                        residentId = mobileValue;
-                    }
+                    // mobil hentes som tekst
+                    string mobile = reader["mobile"].ToString();
 
-                    Booking booking = new Booking(date, slot, machineId, residentId);
+                    // vi gemmer kun mobil som tekst i modellen
+                    Booking booking = new Booking(date, slot, machineId, 0);
+                    booking.Mobile = mobile; 
                     result.Add(counter, booking);
                     counter++;
                 }
@@ -67,6 +66,7 @@ namespace LaundryLibrary.Repository
             return result;
         }
 
+        // Tilføjer ny booking i databasen
         public void Add(Booking item)
         {
             SqlConnection connection = new SqlConnection(_connectionString);
@@ -75,11 +75,10 @@ namespace LaundryLibrary.Repository
                 "VALUES (@date, @time, @machine, @mobile)",
                 connection);
 
-           
             command.Parameters.AddWithValue("@date", item.Date);
-            command.Parameters.AddWithValue("@time", ((int)item.Slot).ToString());
+            command.Parameters.AddWithValue("@time", ((int)item.Slot));
             command.Parameters.AddWithValue("@machine", item.MachineId);
-            command.Parameters.AddWithValue("@mobile", item.ResidentId.ToString());
+            command.Parameters.AddWithValue("@mobile", item.Mobile);
 
             try
             {
@@ -105,11 +104,16 @@ namespace LaundryLibrary.Repository
             }
         }
 
-        public void Delete(int id)
+        // Sletter booking ud fra machine_ID og mobil
+        public void Delete(int machineId, string mobile)
         {
             SqlConnection connection = new SqlConnection(_connectionString);
-            SqlCommand command = new SqlCommand("DELETE FROM Booking WHERE machine_ID = @id", connection);
-            command.Parameters.AddWithValue("@id", id);
+            SqlCommand command = new SqlCommand(
+                "DELETE FROM Booking WHERE machine_ID = @machine AND mobile = @mobile",
+                connection);
+
+            command.Parameters.AddWithValue("@machine", machineId);
+            command.Parameters.AddWithValue("@mobile", mobile);
 
             try
             {
@@ -128,12 +132,23 @@ namespace LaundryLibrary.Repository
                 }
             }
 
-            if (_bookings.ContainsKey(id))
+            // Fjerner også lokalt fra dictionary
+            List<int> keysToRemove = new List<int>();
+            foreach (KeyValuePair<int, Booking> kv in _bookings)
             {
-                _bookings.Remove(id);
+                if (kv.Value.MachineId == machineId && kv.Value.Mobile == mobile)
+                {
+                    keysToRemove.Add(kv.Key);
+                }
+            }
+
+            foreach (int k in keysToRemove)
+            {
+                _bookings.Remove(k);
             }
         }
 
+        // Ændrer dato/tidsrum 
         public void Change(DateTime date, int point, int id)
         {
             if (_bookings.ContainsKey(id))
@@ -143,6 +158,7 @@ namespace LaundryLibrary.Repository
             }
         }
 
+        // Skifter maskine 
         public void Choice(int id, int booking)
         {
             if (_bookings.ContainsKey(booking))
@@ -151,26 +167,25 @@ namespace LaundryLibrary.Repository
             }
         }
 
+        // Antal bookinger
         public int GetCount()
         {
-            int count = 0;
-            foreach (KeyValuePair<int, Booking> b in _bookings)
-            {
-                count++;
-            }
-            return count;
+            return _bookings.Count;
         }
 
+        // Finder booking i dictionary
         public Booking FindKey(int key)
         {
             if (_bookings.ContainsKey(key))
             {
                 return _bookings[key];
             }
-            else
-            {
-                return null;
-            }
+            return null;
+        }
+
+        public void Delete(int id)
+        {
+            Delete(id, string.Empty);
         }
     }
 }

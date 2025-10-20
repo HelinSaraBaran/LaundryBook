@@ -1,156 +1,132 @@
 ﻿using LaundryLibrary.Model;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Microsoft.Data.SqlClient;
 
 namespace LaundryLibrary.Repository
 {
-    
     public class MachineRepository : IMachineRepository
     {
-       
-        private readonly string _connectionString;
+        private readonly string _connectionString;              
+        private readonly Dictionary<int, Machine> _machineList; 
 
-  
-        private readonly Dictionary<int, Machine> _machines;
-
-       
+        // Constructor 
         public MachineRepository(string connectionString)
         {
             _connectionString = connectionString;
-            _machines = new Dictionary<int, Machine>();
-
-            Console.WriteLine("🔍 MachineRepository connectionString = " + connectionString);
+            _machineList = new Dictionary<int, Machine>();
         }
 
-      
+        // Henter alle maskiner fra databasen
         public Dictionary<int, Machine> GetAll()
         {
             Dictionary<int, Machine> machinesFromDatabase = new Dictionary<int, Machine>();
 
-            
-            SqlConnection connection = new SqlConnection(_connectionString);
-            SqlCommand command = new SqlCommand("SELECT machine_ID, machine_type FROM machines", connection);
+            SqlConnection sqlConnection = new SqlConnection(_connectionString);
+            SqlCommand sqlCommand = new SqlCommand("SELECT machine_ID, machine_type FROM machines", sqlConnection);
 
             try
             {
-                
-                connection.Open();
+                sqlConnection.Open();
+                SqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
-               
-                SqlDataReader reader = command.ExecuteReader();
-
-              
-                while (reader.Read())
+                while (sqlReader.Read())
                 {
-                    int id = Convert.ToInt32(reader["machine_ID"]);
+                    
+                    int machineId = Convert.ToInt32(sqlReader["machine_ID"]);
+                    string machineTypeText = sqlReader["machine_type"].ToString();
 
-                
-                    string typeText = reader["machine_type"].ToString();
-                    MachineType type;
+                    // Bestemmer maskinetype
+                    MachineType machineType = MachineType.Washer;
+                    if (machineTypeText == "Tørretumbler") { machineType = MachineType.Dryer; }
+                    else if (machineTypeText == "Rullemaskine") { machineType = MachineType.Ironer; }
 
-                 
-                    if (int.TryParse(typeText, out int numericType))
-                    {
-                        type = (MachineType)numericType;
-                    }
-                    else
-                    {
-                        type = (MachineType)Enum.Parse(typeof(MachineType), typeText, true);
-                    }
+                  
 
-                    Machine machine = new Machine(id, type);
-                    machinesFromDatabase.Add(id, machine);
+                    // Opretter objekt og tilføjer til dictionary
+                    Machine machine = new Machine(machineId, machineType);
+                    machinesFromDatabase.Add(machineId, machine);
                 }
 
-              
-                reader.Close();
+                sqlReader.Close();
             }
-            catch (SqlException ex)
+            catch (SqlException sqlError)
             {
-              
-                throw new Exception("Database error in MachineRepository.GetAll(): " + ex.Message);
+                throw new Exception("Databasefejl i MachineRepository.GetAll(): " + sqlError.Message);
             }
             finally
             {
-              
-                if (connection.State == System.Data.ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                sqlConnection.Close();
             }
 
             return machinesFromDatabase;
         }
 
-        public void Add(Machine item)
+        // Tilføjer ny maskine til databasen
+        public void Add(Machine machine)
         {
-            SqlConnection connection = new SqlConnection(_connectionString);
-            SqlCommand command = new SqlCommand(
-                "INSERT INTO machines (machine_ID, machine_type) VALUES (@machine_ID, @machine_type)", connection);
+            SqlConnection sqlConnection = new SqlConnection(_connectionString);
+            SqlCommand sqlCommand = new SqlCommand(
+                "INSERT INTO machines (machine_ID, machine_type) VALUES (@machine_ID, @machine_type)",
+                sqlConnection);
 
-      
-            command.Parameters.AddWithValue("@machine_ID", item.Id);
-            command.Parameters.AddWithValue("@machine_type", item.Type.ToString());
+            sqlCommand.Parameters.AddWithValue("@machine_ID", machine.Id);
+            sqlCommand.Parameters.AddWithValue("@machine_type", machine.Type.ToString());
 
             try
             {
-                connection.Open();
-                command.ExecuteNonQuery();     
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
             }
-            catch (SqlException ex)
+            catch (SqlException sqlError)
             {
-                throw new Exception("Database error in MachineRepository.Add(): " + ex.Message);
+                throw new Exception("Databasefejl i MachineRepository.Add(): " + sqlError.Message);
             }
             finally
             {
-                if (connection.State == System.Data.ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                sqlConnection.Close();
             }
 
-            if (!_machines.ContainsKey(item.Id))
+            // Gem også i lokal liste
+            if (!_machineList.ContainsKey(machine.Id))
             {
-                _machines.Add(item.Id, item);
+                _machineList.Add(machine.Id, machine);
             }
         }
 
-        public void Delete(int id)
+        // Sletter maskine ud fra ID
+        public void Delete(int machineId)
         {
-            SqlConnection connection = new SqlConnection(_connectionString);
-            SqlCommand command = new SqlCommand("DELETE FROM machines WHERE machine_ID = @Id", connection);
-            command.Parameters.AddWithValue("@Id", id);
+            SqlConnection sqlConnection = new SqlConnection(_connectionString);
+            SqlCommand sqlCommand = new SqlCommand("DELETE FROM machines WHERE machine_ID = @Id", sqlConnection);
+            sqlCommand.Parameters.AddWithValue("@Id", machineId);
 
             try
             {
-                connection.Open();
-                command.ExecuteNonQuery();    
+                sqlConnection.Open();
+                sqlCommand.ExecuteNonQuery();
             }
-            catch (SqlException ex)
+            catch (SqlException sqlError)
             {
-                throw new Exception("Database error in MachineRepository.Delete(): " + ex.Message);
+                throw new Exception("Databasefejl i MachineRepository.Delete(): " + sqlError.Message);
             }
             finally
             {
-                if (connection.State == System.Data.ConnectionState.Open)
-                {
-                    connection.Close();
-                }
+                sqlConnection.Close();
             }
 
-            if (_machines.ContainsKey(id))
+            if (_machineList.ContainsKey(machineId))
             {
-                _machines.Remove(id);
+                _machineList.Remove(machineId);
             }
         }
 
+        // Finder maskine ud fra nøgle
         public Machine FindKey(int key)
         {
-            if (_machines.ContainsKey(key))
+            if (_machineList.ContainsKey(key))
             {
-                return _machines[key];
+                return _machineList[key];
             }
             else
             {

@@ -1,23 +1,21 @@
-﻿using LaundryLibrary.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
-
+using LaundryLibrary.Model;
 
 namespace LaundryLibrary.Repository
 {
-    public interface IBookingRepository: IGeneric<Booking>
+    public interface IBookingRepository : IGeneric<Booking>
     {
-        Dictionary<int,Booking> GetAll();
+        Dictionary<int, Booking> GetAll();
         void Add(Booking item);
-        void Delete(int id);
+
+        void Delete(int machineId, string mobile);
+
         void Change(DateTime date, int point, int id);
         Booking FindKey(int key);
         void Choice(int id, int booking);
 
-
+       
     }
+
 }
