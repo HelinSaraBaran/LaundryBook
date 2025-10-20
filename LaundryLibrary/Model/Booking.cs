@@ -1,6 +1,6 @@
 ﻿namespace LaundryLibrary.Model
 {
-    // enum 2 hours (gemmes som 1..6 i DB)
+    // Enum for tidsintervaller (2 timer)
     public enum TimeSlot
     {
         Slot08_10 = 1,
@@ -11,13 +11,14 @@
         Slot18_20 = 6
     }
 
+    // Booking repræsenterer en vaskereservation i systemet
     public class Booking
     {
-        // our properties 
-        public DateTime Date { get; set; }
-        public TimeSlot Slot { get; set; }
-        public int MachineId { get; set; }
-        public int ResidentId { get; set; }
+        public DateTime Date { get; set; }       
+        public TimeSlot Slot { get; set; }       
+        public int MachineId { get; set; }       
+        public int ResidentId { get; set; }      
+        public string Mobile { get; set; }       
 
         // Fulde constructor
         public Booking(DateTime date, int slot, int machineId, int residentId)
@@ -25,8 +26,9 @@
             Date = date.Date;
             MachineId = machineId;
             ResidentId = residentId;
+            Mobile = string.Empty; // undgå null
 
-            
+            // Tildeler tidsrum ud fra talværdi 1-6
             if (slot >= 1 && slot <= 6)
             {
                 Slot = (TimeSlot)slot;
@@ -37,21 +39,21 @@
             }
         }
 
-      
-        public TimeSlot ChangeTimeSlot(int newslot, TimeSlot current)
+        // Ændrer tidsrum for en eksisterende booking
+        public TimeSlot ChangeTimeSlot(int newSlot, TimeSlot currentSlot)
         {
-            if (newslot >= 1 && newslot <= 6)
+            if (newSlot >= 1 && newSlot <= 6)
             {
-                Slot = (TimeSlot)newslot;
+                Slot = (TimeSlot)newSlot;
                 return Slot;
             }
-            return current;
+            return currentSlot;
         }
 
-      
+        // Returnerer en simpel tekst om bookingen
         public override string ToString()
         {
-            return "Booking #" + MachineId.ToString() + " [" + ResidentId.ToString() + "]";
+            return "Booking: Maskine #" + MachineId + " | Mobil: " + Mobile + " | Tidsrum: " + Slot.ToString();
         }
     }
 }
