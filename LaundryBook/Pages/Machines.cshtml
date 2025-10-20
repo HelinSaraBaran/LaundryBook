@@ -1,0 +1,45 @@
+﻿@page
+@model LaundryBook.Pages.MachinesModel
+@{
+    ViewData["Title"] = "Maskiner";
+}
+
+<section class="container py-5">
+    <h1 class="mb-4">Maskiner</h1>
+
+    @if (Model.Machines != null && Model.Machines.Count > 0)
+    {
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (System.Collections.Generic.KeyValuePair<int, LaundryLibrary.Model.Machine> pair in Model.Machines)
+                    {
+                        LaundryLibrary.Model.Machine m = pair.Value;
+                        string navn = "Vaskemaskine";
+                        if (m.Type == LaundryLibrary.Model.MachineType.Dryer) { navn = "Tørretumbler"; }
+                        else if (m.Type == LaundryLibrary.Model.MachineType.Ironer) { navn = "Rullemaskine"; }
+
+                        <tr>
+                            <td>@m.Id</td>
+                            <td>@navn</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">Ingen maskiner i databasen.</div>
+    }
+
+    <div class="mt-3">
+        <a asp-page="/Booking" class="btn btn-primary">Gå til booking</a>
+    </div>
+</section>

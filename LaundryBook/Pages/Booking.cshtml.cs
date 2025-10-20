@@ -62,6 +62,7 @@ namespace LaundryBook.Pages
             return RedirectToPage("/Booking");
         }
 
+        // 0 referencer da vi mangler data i vores db
        
         public IActionResult OnPostDelete(int machineId, string mobile)
         {
