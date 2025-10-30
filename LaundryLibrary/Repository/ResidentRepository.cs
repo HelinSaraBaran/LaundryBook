@@ -8,21 +8,21 @@ namespace LaundryLibrary.Repository
     public class ResidentRepository : IResidentRepository
     {
         private readonly string _connectionString; 
-        private readonly List<Apartment> _apartmentList; 
+        private readonly Dictionary<int,Apartment> _apartmentList; 
         private readonly List<Resident> _residentList;   
 
         // Constructor 
         public ResidentRepository(string connectionString)
         {
             _connectionString = connectionString;
-            _apartmentList = new List<Apartment>();
+            _apartmentList = new Dictionary<int,Apartment>();
             _residentList = new List<Resident>();
         }
 
         // Henter alle lejligheder fra databasen
-        public List<Apartment> GetAllApartments()
+        public Dictionary<int,Apartment> GetAllApartments()
         {
-            List<Apartment> apartmentsFromDatabase = new List<Apartment>();
+            Dictionary<int,Apartment> apartmentsFromDatabase = new Dictionary<int,Apartment>();
 
             SqlConnection sqlConnection = new SqlConnection(_connectionString);
             SqlCommand sqlCommand = new SqlCommand(
@@ -33,7 +33,7 @@ namespace LaundryLibrary.Repository
             {
                 sqlConnection.Open();
                 SqlDataReader sqlReader = sqlCommand.ExecuteReader();
-
+                int counter = 1;
                 while (sqlReader.Read())
                 {
                     string street = sqlReader["adress"].ToString();
@@ -43,7 +43,8 @@ namespace LaundryLibrary.Repository
                     int floor = Convert.ToInt32(sqlReader["apartmentfloor"]);
 
                     Apartment apartment = new Apartment("Roskilde", floor, streetNumber, postalCode, apartmentLetter, street);
-                    apartmentsFromDatabase.Add(apartment);
+                    apartmentsFromDatabase.Add(counter,apartment);
+                    counter++;
                 }
 
                 sqlReader.Close();
@@ -89,16 +90,15 @@ namespace LaundryLibrary.Repository
                 sqlConnection.Close();
             }
 
-            _apartmentList.Add(apartment);
         }
 
         // Sletter en lejlighed fra databasen
-        public void DeleteApartment(Apartment apartment)
+        public void DeleteApartment(int apartment)
         {
             SqlConnection sqlConnection = new SqlConnection(_connectionString);
             SqlCommand sqlCommand = new SqlCommand(
                 "DELETE FROM residents WHERE apartmentnumber = @apartmentnumber", sqlConnection);
-            sqlCommand.Parameters.AddWithValue("@apartmentnumber", apartment.ApartmentLetter);
+            sqlCommand.Parameters.AddWithValue("@apartmentnumber", _apartmentList[apartment].ApartmentLetter);
 
             try
             {

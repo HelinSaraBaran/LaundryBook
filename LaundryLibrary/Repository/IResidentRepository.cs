@@ -11,9 +11,9 @@ namespace LaundryLibrary.Repository
 {
     public interface IResidentRepository
     {
-        List<Apartment> GetAllApartments();
+        Dictionary<int,Apartment> GetAllApartments();
         void AddApartment(Apartment item);
-        void DeleteApartment(Apartment id);
+        void DeleteApartment(int id);
         List<Resident> GetAllResidents();
         void AddResident(Resident item);
         void DeleteResident(Resident id);

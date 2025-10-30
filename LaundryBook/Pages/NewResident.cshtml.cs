@@ -2,6 +2,7 @@ using LaundryLibrary.Model;
 using LaundryLibrary.Service;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Diagnostics;
 
 namespace LaundryBook.Pages
 {
@@ -20,7 +21,9 @@ namespace LaundryBook.Pages
         [BindProperty]
         public string Email { get; set; }
         [BindProperty]
-        public List<Apartment> Apartments { set; get; }
+        public int Ap { get; set; }
+        [BindProperty]
+        public Dictionary<int,Apartment> Apartments { set; get; }
 
         public NewResidentModel(ResidentService rs)
         {
@@ -32,9 +35,19 @@ namespace LaundryBook.Pages
         {
             Apartments = _residentService.GetAllApartments();
         }
-        public IActionResult OnPostCreate(int id,string fristName,string lastName,string mobile,string email, Apartment apartment)
+        public IActionResult OnPostCreate()
         {
-            _residentService.AddResident(new Resident(id, fristName, lastName, mobile, email, apartment));
+            try
+            {
+                _residentService.AddResident(new Resident(Id, FristName, LastName, Moblie, Email, Apartments[Ap]));
+
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine(ex);
+                return RedirectToPage("/Index");
+
+            }
             return RedirectToPage("/");
         }
     }

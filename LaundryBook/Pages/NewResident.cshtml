@@ -2,3 +2,64 @@
 @model LaundryBook.Pages.NewResidentModel
 @{
 }
+<div class="card shadow-sm mb-5">
+    <div class="card-body">
+        <form method="post" asp-page-handler="Create" class="row g-3">
+
+            <!-- Id -->
+            <div class="col-md-3">
+                <label asp-for="Id" class="form-label fw-semibold">id</label>
+                <input asp-for="Id" type="text" class="form-control" required />
+            </div>
+
+            <!-- FristName -->
+            <div class="col-md-3">
+                <label for="inputComment">Skriv for navn her: </label>
+                <input type="text" asp-for="FristName" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+            </div>
+            <!-- LastName -->
+            <div class="col-md-3">
+                <label for="inputComment">Skriv dit efternavn her: </label>
+                <input type="text" asp-for="LastName" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+            </div>
+            <!-- Moblie -->
+            <div class="col-md-3">
+                <label for="inputComment">Skriv dit moblie number her: </label>
+                <input type="text" asp-for="Moblie" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+            </div>
+            <!-- Email -->
+            <div class="col-md-3">
+                <label for="inputComment">Skriv dit email her: </label>
+                <input type="text" asp-for="Email" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+            </div>
+
+            <!-- Ap -->
+            <div class="col-md-3">
+                <label asp-for="Ap" class="form-label fw-semibold">Apartment</label>
+                <select asp-for="Ap" class="form-select" required>
+                    <option value="0">– vælg Apartment –</option>
+                    @if (Model.Apartments != null && Model.Apartments.Count > 0)
+                    {
+                        foreach (var ap in Model.Apartments)
+                        {
+                            <option value="@ap.Key">
+                               
+                    </option>
+                                        }
+                    }
+                </select>
+                @if (Model.Apartments == null || Model.Apartments.Count == 0)
+                {
+                    <div class="form-text text-warning">Ingen Apartments i databasen.</div>
+                }
+            </div>
+
+           
+
+            <!-- Gem-knap -->
+            <div class="col-12 text-end mt-3">
+                <button type="submit" class="btn btn-primary px-4">Gem booking</button>
+            </div>
+        </form>
+    </div>
+</div>

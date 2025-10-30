@@ -17,7 +17,7 @@ namespace LaundryLibrary.Service
         {
             _IResident = repo;
         }
-        public List<Apartment> GetAllApartments()
+        public Dictionary<int, Apartment> GetAllApartments()
         {
             return _IResident.GetAllApartments();
         }
@@ -25,7 +25,7 @@ namespace LaundryLibrary.Service
         {
             _IResident.AddApartment(item);
         }
-        public void DeleteApartment(Apartment id)
+        public void DeleteApartment(int id)
         {
             _IResident.DeleteApartment(id);
         }
