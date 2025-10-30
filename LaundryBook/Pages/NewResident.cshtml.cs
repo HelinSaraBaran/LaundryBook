@@ -21,9 +21,23 @@ namespace LaundryBook.Pages
         [BindProperty]
         public string Email { get; set; }
         [BindProperty]
-        public int Ap { get; set; }
+       public string City { get; set; }
         [BindProperty]
-        public Dictionary<int,Apartment> Apartments { set; get; }
+
+        public int Floor { get; set; }
+        [BindProperty]
+
+        public string Streetandnumber { get; set; }
+        [BindProperty]
+
+        public string postacode { get; set; }
+        [BindProperty]
+
+        public string aprtymentletter { get; set; }
+        [BindProperty]
+
+        public string addressline { get; set; }
+
 
         public NewResidentModel(ResidentService rs)
         {
@@ -33,22 +47,15 @@ namespace LaundryBook.Pages
         }
         public void OnGet()
         {
-            Apartments = _residentService.GetAllApartments();
+
         }
         public IActionResult OnPostCreate()
         {
-            try
-            {
-                _residentService.AddResident(new Resident(Id, FristName, LastName, Moblie, Email, Apartments[Ap]));
+                _residentService.AddResident(new Resident(Id, FristName, LastName, Moblie, Email, new Apartment(City,Floor,Streetandnumber,postacode,aprtymentletter,addressline)));
 
-            }
-            catch(Exception ex)
-            {
-                Debug.WriteLine(ex);
-                return RedirectToPage("/Index");
-
-            }
-            return RedirectToPage("/");
+            
+          
+            return RedirectToPage("/index");
         }
     }
 }

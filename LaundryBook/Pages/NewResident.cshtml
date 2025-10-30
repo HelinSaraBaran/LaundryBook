@@ -32,27 +32,38 @@
                 <label for="inputComment">Skriv dit email her: </label>
                 <input type="text" asp-for="Email" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
             </div>
-
-            <!-- Ap -->
+            <!-- city -->
             <div class="col-md-3">
-                <label asp-for="Ap" class="form-label fw-semibold">Apartment</label>
-                <select asp-for="Ap" class="form-select" required>
-                    <option value="0">– vælg Apartment –</option>
-                    @if (Model.Apartments != null && Model.Apartments.Count > 0)
-                    {
-                        foreach (var ap in Model.Apartments)
-                        {
-                            <option value="@ap.Key">
-                               
-                    </option>
-                                        }
-                    }
-                </select>
-                @if (Model.Apartments == null || Model.Apartments.Count == 0)
-                {
-                    <div class="form-text text-warning">Ingen Apartments i databasen.</div>
-                }
+                <label for="inputComment">Skriv dit City her: </label>
+                <input type="text" asp-for="City" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
             </div>
+            <!-- floor -->
+            <div class="col-md-3">
+                <label for="inputComment">Skriv dit email her: </label>
+                <input type="text" asp-for="Floor" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+            </div>
+            <!-- streetandnumber -->
+            <div class="col-md-3">
+                <label for="inputComment">Skriv dit email her: </label>
+                <input type="text" asp-for="Streetandnumber" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+            </div>
+            <!-- postacode -->
+            <div class="col-md-3">
+                <label for="inputComment">Skriv dit email her: </label>
+                <input type="text" asp-for="postacode" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+            </div>
+            <!-- apretmenleetter -->
+            <div class="col-md-3">
+                <label for="inputComment">Skriv dit email her: </label>
+                <input type="text" asp-for="aprtymentletter" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+            </div>
+            <!-- adressline -->
+            <div class="col-md-3">
+                <label for="inputComment">Skriv dit email her: </label>
+                <input type="text" asp-for="addressline" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+            </div>
+            
+          
 
            
 
