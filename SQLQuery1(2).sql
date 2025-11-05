@@ -64,9 +64,7 @@ alter column apartmentnumber varchar(200) not null
 alter table residents
 add unique (apartmentnumber)
 alter table residents
-add unique(adress)
-alter table residents
-add unique (postalcode)  
+add unique(adress) 
 alter table residents
 add check (postalcode like'[1-4][0-9][0-9][0-9]' and LEN(postalcode) <= 4)
 alter table residents

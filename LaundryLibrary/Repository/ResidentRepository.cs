@@ -145,7 +145,10 @@ namespace LaundryLibrary.Repository
                     string postal = sqlReader["postalcode"].ToString();
                     int floor = Convert.ToInt32(sqlReader["apartmentfloor"]);
 
-                    Apartment apartment = new Apartment("Roskilde", floor, streetNumber, postal, apartmentLetter, street);
+                    //combine adress clearly
+                    string fullAddress = $"{street} {streetNumber}, {postal} Roskilde({floor}.{apartmentLetter})";
+
+                    Apartment apartment = new Apartment("Roskilde", floor, $"{street} { streetNumber }", postal, apartmentLetter, fullAddress);
                     Resident resident = new Resident(idCounter, firstName, lastName, mobile, email, apartment);
 
                     residentsFromDatabase.Add(resident);
@@ -156,7 +159,7 @@ namespace LaundryLibrary.Repository
             }
             catch (SqlException sqlError)
             {
-                throw new Exception("Databasefejl i ResidentRepository.GetAllResidents(): " + sqlError.Message);
+                throw new Exception("Database error in ResidentRepository.GetAllResidents(): " + sqlError.Message);
             }
             finally
             {

@@ -1,0 +1,32 @@
+﻿@page
+@model LaundryBook.Pages.ResidentsListModel
+
+
+<h2>Beboerliste</h2>
+<table class="table">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Navn</th>
+			<th>Familie Navn</th>
+			<th>Mobil</th>
+			<th>Adresse</th>
+			<th>Email</th>
+		</tr>
+	</thead>
+	<tbody>
+	@foreach (var resident in Model.Residents)
+	{
+		<tr>
+			<td>@resident.Id</td>
+			<td>@resident.FirstName</td>
+			<td>@resident.LastName</td>
+			<td>@resident.Mobile</td>
+			<td>
+					@resident.Apartment.StreetAndNumber, @resident.Apartment.PostalCode @resident.Apartment.City
+				</td>
+			<td>@resident.Email</td>
+
+		</tr>
+	}
+	</tbody>

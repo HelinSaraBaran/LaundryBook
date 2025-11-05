@@ -56,7 +56,9 @@ namespace LaundryBook.Pages
         public IActionResult OnPostCreate()
         {
             Booking newBooking = new Booking(Date, Slot, MachineId, 0);
-            newBooking.Mobile = Mobile;
+
+            //assign mobile number from the session automatically
+            newBooking.Mobile = HttpContext.Session.GetString("UserMObile");
 
             _bookingService.Add(newBooking);
             return RedirectToPage("/Booking");
