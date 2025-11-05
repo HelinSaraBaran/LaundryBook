@@ -20,13 +20,15 @@ namespace LaundryLibrary.Service
         public void Add(Booking item)
         {
             List<string> mobiles = new List<string>();
+            List<int> machineids = new List<int>();
             Dictionary<int,Booking> compreApartments = _ibook.GetAll();
             foreach (KeyValuePair<int, Booking> kp in compreApartments)
             {
 
                 mobiles.Add(kp.Value.Mobile);
+                machineids.Add(kp.Value.MachineId);
             }
-            if (!mobiles.Contains(item.Mobile) && item.Mobile != null)
+            if (!mobiles.Contains(item.Mobile) && item.Mobile != null && !machineids.Contains(item.MachineId))
             {
                 _ibook.Add(item);
             }
