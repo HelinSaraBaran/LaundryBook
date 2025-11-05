@@ -58,7 +58,7 @@ namespace LaundryBook.Pages
             Booking newBooking = new Booking(Date, Slot, MachineId, 0);
 
             //assign mobile number from the session automatically
-            newBooking.Mobile = HttpContext.Session.GetString("UserMObile");
+            newBooking.Mobile = HttpContext.Session.GetString("UserMobile");
 
             _bookingService.Add(newBooking);
             return RedirectToPage("/Booking");

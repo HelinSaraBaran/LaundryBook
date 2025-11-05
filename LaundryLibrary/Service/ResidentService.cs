@@ -1,11 +1,13 @@
-﻿using System;
+﻿using LaundryLibrary.Model;
+using LaundryLibrary.Repository;
+using Microsoft.Data.SqlClient;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 using System.Text;
 using System.Threading.Tasks;
-using LaundryLibrary.Repository;
-using LaundryLibrary.Model;
-using Microsoft.Data.SqlClient;
 
 
 namespace LaundryLibrary.Service
@@ -23,7 +25,18 @@ namespace LaundryLibrary.Service
         }
         public void AddApartment(Apartment item)
         {
-            _IResident.AddApartment(item);
+            //List<int> keys = new List<int>();
+            //Dictionary<int, Apartment> compreApartments = _IResident.GetAllApartments();
+            //foreach (KeyValuePair<int, Apartment> kp in compreApartments)
+            //{
+                
+            //    keys.Add(kp.Key);
+            //}
+            //if (!keys.Contains(item.Id))
+            //{
+                _IResident.AddApartment(item);
+            //}
+            
         }
         public void DeleteApartment(int id)
         {
@@ -35,7 +48,17 @@ namespace LaundryLibrary.Service
         }
         public void AddResident(Resident item)
         {
-            _IResident.AddResident(item);
+            List<string> mobiles = new List<string>();
+            List<Resident> compreApartments = _IResident.GetAllResidents();
+            foreach (Resident r in compreApartments)
+            {
+
+                mobiles.Add(r.Mobile);
+            }
+            if (!mobiles.Contains(item.Mobile))
+            {
+                _IResident.AddResident(item);
+            }
         }
         public void DeleteResident(Resident id)
         {

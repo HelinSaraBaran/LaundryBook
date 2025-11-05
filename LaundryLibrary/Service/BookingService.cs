@@ -19,7 +19,18 @@ namespace LaundryLibrary.Service
         // booking oprettes
         public void Add(Booking item)
         {
-            _ibook.Add(item);
+            List<string> mobiles = new List<string>();
+            Dictionary<int,Booking> compreApartments = _ibook.GetAll();
+            foreach (KeyValuePair<int, Booking> kp in compreApartments)
+            {
+
+                mobiles.Add(kp.Value.Mobile);
+            }
+            if (!mobiles.Contains(item.Mobile) && item.Mobile != null)
+            {
+                _ibook.Add(item);
+            }
+            
         }
 
         // Henter alle bookinger
