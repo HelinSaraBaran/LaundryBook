@@ -32,9 +32,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Booking">Booking</a>
                         </li>
-                        <li class="nav-item ">
-                            <a class = "nav-link text-dark" asp-area="" asp-page="/Overview1">Oversigt</a>
-                        </li>
+                        
 						@if (Context.Session.GetString("UserMobile") == "0000") //I made this condition to hide Beboere button when logged in and appears only to admin (with mobile number 0000)
                         {
                             <li class="nav-item ">
