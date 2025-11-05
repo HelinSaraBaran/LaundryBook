@@ -2,76 +2,79 @@
 @model LaundryBook.Pages.NewResidentModel
 @{
 }
-<div class="card shadow-sm mb-5">
-    <div class="card-body">
-        <form method="post" asp-page-handler="Create" class="row g-3">
+@if (HttpContext.Session.GetString("UserMobile") == "0000")
+{
+    <div class="card shadow-sm mb-5">
+        <div class="card-body">
+            <form method="post" asp-page-handler="Create" class="row g-3">
 
-            <!-- Id -->
-            <div class="col-md-3">
-                <label asp-for="Id" class="form-label fw-semibold">id</label>
-                <input asp-for="Id" type="text" class="form-control" required />
-            </div>
+                <!-- Id -->
+                <div class="col-md-3">
+                    <label asp-for="Id" class="form-label fw-semibold">id</label>
+                    <input asp-for="Id" type="text" class="form-control" required />
+                </div>
 
-            <!-- FristName -->
-            <div class="col-md-3">
-                <label for="inputComment">Skriv for navn her: </label>
-                <input type="text" asp-for="FristName" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
-            </div>
-            <!-- LastName -->
-            <div class="col-md-3">
-                <label for="inputComment">Skriv dit efternavn her: </label>
-                <input type="text" asp-for="LastName" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
-            </div>
-            <!-- Moblie -->
-            <div class="col-md-3">
-                <label for="inputComment">Skriv dit moblie number her: </label>
-                <input type="text" asp-for="Moblie" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
-            </div>
-            <!-- Email -->
-            <div class="col-md-3">
-                <label for="inputComment">Skriv dit email her: </label>
-                <input type="text" asp-for="Email" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
-            </div>
-            <!-- city -->
-            <div class="col-md-3">
-                <label for="inputComment">Skriv dit City her: </label>
-                <input type="text" asp-for="City" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
-            </div>
-            <!-- floor -->
-            <div class="col-md-3">
-                <label for="inputComment">Skriv dit floor her: </label>
-                <input type="text" asp-for="Floor" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
-            </div>
-            <!-- streetandnumber -->
-            <div class="col-md-3">
-                <label for="inputComment">Skriv dit Street and number her: </label>
-                <input type="text" asp-for="Streetandnumber" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
-            </div>
-            <!-- postacode -->
-            <div class="col-md-3">
-                <label for="inputComment">Skriv dit Postalcode her: </label>
-                <input type="text" asp-for="postacode" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
-            </div>
-            <!-- apretmenleetter -->
-            <div class="col-md-3">
-                <label for="inputComment">Skriv dit AprtmentLettter her: </label>
-                <input type="text" asp-for="aprtymentletter" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
-            </div>
-            <!-- adressline -->
-            <div class="col-md-3">
-                <label for="inputComment">Skriv dit adressLine her: </label>
-                <input type="text" asp-for="addressline" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
-            </div>
-            
-          
+                <!-- FristName -->
+                <div class="col-md-3">
+                    <label for="inputComment">Skriv for navn her: </label>
+                    <input type="text" asp-for="FristName" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+                </div>
+                <!-- LastName -->
+                <div class="col-md-3">
+                    <label for="inputComment">Skriv dit efternavn her: </label>
+                    <input type="text" asp-for="LastName" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+                </div>
+                <!-- Moblie -->
+                <div class="col-md-3">
+                    <label for="inputComment">Skriv dit moblie number her: </label>
+                    <input type="text" asp-for="Moblie" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+                </div>
+                <!-- Email -->
+                <div class="col-md-3">
+                    <label for="inputComment">Skriv dit email her: </label>
+                    <input type="text" asp-for="Email" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+                </div>
+                <!-- city -->
+                <div class="col-md-3">
+                    <label for="inputComment">Skriv dit City her: </label>
+                    <input type="text" asp-for="City" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+                </div>
+                <!-- floor -->
+                <div class="col-md-3">
+                    <label for="inputComment">Skriv dit floor her: </label>
+                    <input type="text" asp-for="Floor" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+                </div>
+                <!-- streetandnumber -->
+                <div class="col-md-3">
+                    <label for="inputComment">Skriv dit Street and number her: </label>
+                    <input type="text" asp-for="Streetandnumber" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+                </div>
+                <!-- postacode -->
+                <div class="col-md-3">
+                    <label for="inputComment">Skriv dit Postalcode her: </label>
+                    <input type="text" asp-for="postacode" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+                </div>
+                <!-- apretmenleetter -->
+                <div class="col-md-3">
+                    <label for="inputComment">Skriv dit AprtmentLettter her: </label>
+                    <input type="text" asp-for="aprtymentletter" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+                </div>
+                <!-- adressline -->
+                <div class="col-md-3">
+                    <label for="inputComment">Skriv dit adressLine her: </label>
+                    <input type="text" asp-for="addressline" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
+                </div>
 
-           
 
-            <!-- Gem-knap -->
-@* 			The button was Gem booking and i changed it to Gem beboer
+
+
+
+                <!-- Gem-knap -->
+                @* 			The button was Gem booking and i changed it to Gem beboer
  *@            <div class="col-12 text-end mt-3">
-                <button type="submit" class="btn btn-primary px-4">Gem beboer</button>
-            </div>
-        </form>
+                    <button type="submit" class="btn btn-primary px-4">Gem beboer</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+}

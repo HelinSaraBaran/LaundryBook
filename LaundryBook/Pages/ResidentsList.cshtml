@@ -1,8 +1,10 @@
 ﻿@page
 @model LaundryBook.Pages.ResidentsListModel
+@if (HttpContext.Session.GetString("UserMobile") == "0000")
+{
+	
 
-
-<h2>Beboerliste</h2>
+	<h2>Beboerliste</h2>
 <table class="table">
 	<thead>
 		<tr>
@@ -30,3 +32,6 @@
 		</tr>
 	}
 	</tbody>
+	</table>
+}
+

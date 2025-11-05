@@ -2,34 +2,37 @@
 @model LaundryBook.Pages.NewMachineModel
 @{
 }
-<div class="card shadow-sm mb-5">
-    <div class="card-body">
-        <form method="post" asp-page-handler="Create" class="row g-3">
+@if (HttpContext.Session.GetString("UserMobile") == "0000")
+{
+    <div class="card shadow-sm mb-5">
+        <div class="card-body">
+            <form method="post" asp-page-handler="Create" class="row g-3">
 
-            <!-- Id -->
-            <div class="col-md-3">
-                <label for="inputComment">Skriv id til maskine: </label>
-                <input type="text" asp-for="Id" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
-            </div>
-            <!-- type -->
-            
-            <div class="mt-2">
-                <label for="inputComment">hvliken type af maskine: </label>
-                <div class="form-group mt-2 d-inline">
-                    <select asp-for="Type" >
-                        <option value="0">select type af maskine</option>
-                        <option value="1">Washer</option>
-                        <option value="2">Dryer</option>
-                        <option value="3">Ironer</option>
-                        
-                    </select>
+                <!-- Id -->
+                <div class="col-md-3">
+                    <label for="inputComment">Skriv id til maskine: </label>
+                    <input type="text" asp-for="Id" id="inputForm" aria-describedby="textHelp" placeholder="Enter a comment" required>
                 </div>
+                <!-- type -->
 
-            <!-- Gem-knap -->
-            @* 			
+                <div class="mt-2">
+                    <label for="inputComment">hvliken type af maskine: </label>
+                    <div class="form-group mt-2 d-inline">
+                        <select asp-for="Type" >
+                            <option value="0">select type af maskine</option>
+                            <option value="1">Washer</option>
+                            <option value="2">Dryer</option>
+                            <option value="3">Ironer</option>
+
+                        </select>
+                    </div>
+
+                    <!-- Gem-knap -->
+                    @* 			
  *@            <div class="col-12 text-end mt-3">
-                <button type="submit" class="btn btn-primary px-4">Gem maskine</button>
-            </div>
-        </form>
+                        <button type="submit" class="btn btn-primary px-4">Gem maskine</button>
+                    </div>
+            </form>
+        </div>
     </div>
-</div>
+}
