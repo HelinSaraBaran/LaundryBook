@@ -45,9 +45,15 @@ namespace LaundryBook.Pages
             _residentService = rs;
             
         }
-        public void OnGet()
+        public IActionResult OnGet()
         {
+            if (HttpContext.Session.GetString("UserMobile") != "0000")
 
+            {
+                //if not admin, redirect to home page
+                return RedirectToPage("/Index");
+            }
+            return Page();
         }
         public IActionResult OnPostCreate()
         {
