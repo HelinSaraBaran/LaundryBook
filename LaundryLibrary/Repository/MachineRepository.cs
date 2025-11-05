@@ -48,6 +48,9 @@ namespace LaundryLibrary.Repository
                     else if(machineTypeText == "Tørretumbler") { machineType = MachineType.Dryer; }
                     else if (machineTypeText == "Rullemaskine") { machineType = MachineType.Ironer; }
                     else if (machineTypeText == "Vaskemaskine") { machineType = MachineType.Washer; }
+                    else if (machineTypeText == "RollingMachine") { machineType = MachineType.Ironer; }
+                    else if (machineTypeText == "Washingmachhine") { machineType = MachineType.Washer; }
+
 
 
 
