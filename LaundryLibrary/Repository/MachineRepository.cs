@@ -2,13 +2,15 @@
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace LaundryLibrary.Repository
 {
     public class MachineRepository : IMachineRepository
     {
         private readonly string _connectionString;              
-        private readonly Dictionary<int, Machine> _machineList; 
+        private readonly Dictionary<int, Machine> _machineList;
+        MachineType machineType;
 
         // Constructor 
         public MachineRepository(string connectionString)
@@ -35,13 +37,15 @@ namespace LaundryLibrary.Repository
                     
                     int machineId = Convert.ToInt32(sqlReader["machine_ID"]);
                     string machineTypeText = sqlReader["machine_type"].ToString();
+                    Debug.WriteLine(machineTypeText);
 
                     // Bestemmer maskinetype
-                    MachineType machineType = MachineType.Washer;
-                    if (machineTypeText == "Tørretumbler") { machineType = MachineType.Dryer; }
-                    else if (machineTypeText == "Rullemaskine") { machineType = MachineType.Ironer; }
+                    
+                    if (machineTypeText == "Dryer") { machineType = MachineType.Dryer; }
+                    else if (machineTypeText == "Ironer") { machineType = MachineType.Ironer; }
+                    else if (machineTypeText == "Washer") { machineType = MachineType.Washer; }
 
-                  
+
 
                     // Opretter objekt og tilføjer til dictionary
                     Machine machine = new Machine(machineId, machineType);

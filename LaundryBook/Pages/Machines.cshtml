@@ -21,9 +21,10 @@
                     @foreach (System.Collections.Generic.KeyValuePair<int, LaundryLibrary.Model.Machine> pair in Model.Machines)
                     {
                         LaundryLibrary.Model.Machine m = pair.Value;
-                        string navn = "Vaskemaskine";
+                        string navn = "";
                         if (m.Type == LaundryLibrary.Model.MachineType.Dryer) { navn = "Tørretumbler"; }
                         else if (m.Type == LaundryLibrary.Model.MachineType.Ironer) { navn = "Rullemaskine"; }
+                        else if (m.Type == LaundryLibrary.Model.MachineType.Washer) { navn = "Vaskemaskine"; }
 
                         <tr>
                             <td>@m.Id</td>
